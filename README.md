@@ -67,6 +67,70 @@ coreinvent/
 
 ---
 
+## 🗄️ Database Schema
+
+```mermaid
+erDiagram
+    User ||--o{ Operation : "manages"
+    Warehouse ||--o{ Location : "contains"
+    Location ||--o{ StockLevel : "holds"
+    Location ||--o{ Operation : "src/dest"
+    Location ||--o{ StockMoveHistory : "from/to"
+    Category ||--o{ Product : "categorizes"
+    Product ||--o{ StockLevel : "tracked_at"
+    Product ||--o{ OperationItem : "included_in"
+    Product ||--o{ StockMoveHistory : "logged_in"
+    Operation ||--o{ OperationItem : "contains"
+    Operation ||--o{ StockMoveHistory : "generates"
+
+    User {
+        string id PK
+        string name
+        string email
+        UserRole role
+    }
+    Warehouse {
+        string id PK
+        string name
+        string shortCode
+    }
+    Location {
+        string id PK
+        string name
+        string shortCode
+        boolean isScrap
+    }
+    Product {
+        string id PK
+        string name
+        string skuCode
+        string uom
+    }
+    StockLevel {
+        string id PK
+        decimal qtyOnHand
+        decimal qtyAvailable
+    }
+    Operation {
+        string id PK
+        string refNo
+        OperationType type
+        OperationStatus status
+    }
+    OperationItem {
+        string id PK
+        decimal demandQty
+        decimal doneQty
+    }
+    StockMoveHistory {
+        string id PK
+        decimal quantity
+        datetime timestamp
+    }
+```
+
+---
+
 ## 🔐 Role-Based Access Control
 
 CoreInvent implements strict permissions for multi-user environments:
