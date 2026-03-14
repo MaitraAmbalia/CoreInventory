@@ -144,7 +144,7 @@ body {
 
 
 .btn-primary {
-  background: var(--accent-gradient);
+  background: var(--accent-primary);
   color: white;
   font-weight: 600;
   padding: 10px 20px;
@@ -158,24 +158,8 @@ body {
   overflow: hidden;
 }
 
-.btn-primary::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.2) 0%,
-    transparent 50%
-  );
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.btn-primary:hover::before {
-  opacity: 1;
-}
-
 .btn-primary:hover {
+  background: var(--accent-primary-hover);
   transform: translateY(-1px);
   box-shadow: var(--accent-glow);
 }

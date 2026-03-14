@@ -63,7 +63,7 @@ export default function SignupPage() {
               width: 56,
               height: 56,
               borderRadius: "var(--radius-lg)",
-              background: "var(--accent-gradient)",
+              background: "var(--accent-primary)",
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
@@ -85,8 +85,8 @@ export default function SignupPage() {
           </h1>
           <p style={{ color: "var(--text-muted)", fontSize: 14 }}>
             Get started with{" "}
-            <span className="text-gradient" style={{ fontWeight: 600 }}>
-              CoreInvent
+            <span style={{ fontSize: 24, fontWeight: 700, letterSpacing: "-0.03em", fontFamily: "var(--font-outfit)", color: "var(--text-primary)" }}>
+              CoreInventory
             </span>
           </p>
         </div>

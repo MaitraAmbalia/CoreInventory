@@ -65,7 +65,7 @@ function ResetPasswordForm() {
             width: 48,
             height: 48,
             borderRadius: "12px",
-            background: "var(--accent-gradient)",
+            background: "var(--accent-primary)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",

@@ -50,7 +50,7 @@ export default function LoginPage() {
               width: 56,
               height: 56,
               borderRadius: "var(--radius-lg)",
-              background: "var(--accent-gradient)",
+              background: "var(--accent-primary)",
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
@@ -71,7 +71,7 @@ export default function LoginPage() {
             Welcome back
           </h1>
           <p style={{ color: "var(--text-muted)", fontSize: 14 }}>
-            Sign in to <span className="text-gradient" style={{ fontWeight: 600 }}>CoreInvent</span>
+            Sign in to <span style={{ fontFamily: "var(--font-outfit)", fontWeight: 700, color: "var(--accent-primary)" }}>CoreInventory</span>
           </p>
         </div>
 

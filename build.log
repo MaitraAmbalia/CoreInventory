@@ -1,0 +1,23 @@
+
+> coreinvent@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.1.6 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 8.4s
+  Running TypeScript ...
+Failed to compile.
+
+./components/sidebar.tsx:196:18
+Type error: Cannot find name 'Package2'. Did you mean 'Package'?
+
+  194 |                 }}
+  195 |               >
+> 196 |                 <Package2 size={20} color="white" />
+      |                  ^
+  197 |               </div>
+  198 |               <div>
+  199 |                 <span style={{ fontSize: 18, fontWeight: 700, letterSpacing: "-0.03em", color: "var(--text-primary)", fontFamily: "var(--font-outfit)" }}>
+Next.js build worker exited with code: 1 and signal: null

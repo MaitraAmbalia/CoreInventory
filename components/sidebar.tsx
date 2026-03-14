@@ -196,19 +196,9 @@ export default function Sidebar({ user }: SidebarProps) {
                 <Package2 size={20} color="white" />
               </div>
               <div>
-                <div
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 700,
-                    color: "var(--text-primary)",
-                    letterSpacing: "-0.02em",
-                  }}
-                >
-                  CoreInvent
-                </div>
-                <div style={{ fontSize: 11, color: "var(--text-muted)" }}>
-                  Inventory System
-                </div>
+                <span style={{ fontSize: 18, fontWeight: 700, letterSpacing: "-0.03em", color: "var(--text-primary)", fontFamily: "var(--font-outfit)" }}>
+                  CoreInventory
+                </span>
               </div>
             </Link>
             <ThemeToggle />

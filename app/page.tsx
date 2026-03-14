@@ -48,7 +48,7 @@ export default function LandingPage() {
                 width: 36,
                 height: 36,
                 borderRadius: "var(--radius-md)",
-                background: "var(--accent-gradient)",
+                background: "var(--accent-primary)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -58,13 +58,14 @@ export default function LandingPage() {
             </div>
             <span
               style={{
-                fontSize: 18,
+                fontSize: 20,
                 fontWeight: 700,
                 color: "var(--text-primary)",
-                letterSpacing: "-0.02em",
+                letterSpacing: "-0.03em",
+                fontFamily: "var(--font-outfit)",
               }}
             >
-              CoreInvent
+              CoreInventory
             </span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
@@ -194,7 +195,7 @@ export default function LandingPage() {
               lineHeight: 1.65,
             }}
           >
-            CoreInvent is a double-entry inventory system that gives you
+            <span style={{ fontFamily: "var(--font-outfit)", fontWeight: 600 }}>CoreInventory</span> is a double-entry inventory system that gives you
             real-time visibility into stock levels, warehouse operations, and
             supply chain workflows — all in one place.
           </p>
@@ -567,7 +568,7 @@ export default function LandingPage() {
               lineHeight: 1.6,
             }}
           >
-            Join teams that trust CoreInvent for accurate, real-time inventory
+            Join teams that trust <span style={{ fontFamily: "var(--font-outfit)" }}>CoreInventory</span> for accurate, real-time inventory
             management with zero data loss.
           </p>
 
@@ -662,12 +663,14 @@ export default function LandingPage() {
             <Package2 size={18} color="var(--accent-primary)" />
             <span
               style={{
-                fontSize: 14,
-                fontWeight: 600,
+                fontSize: 20,
+                fontWeight: 700,
+                letterSpacing: "-0.03em",
                 color: "var(--text-primary)",
+                fontFamily: "var(--font-outfit)",
               }}
             >
-              CoreInvent
+              CoreInventory
             </span>
           </div>
           <p
@@ -676,7 +679,7 @@ export default function LandingPage() {
               color: "var(--text-muted)",
             }}
           >
-            © {new Date().getFullYear()} CoreInvent. Built with Next.js &
+            © {new Date().getFullYear()} <span style={{ fontFamily: "var(--font-outfit)", fontWeight: 500 }}>CoreInventory</span>. Built with Next.js &
             Prisma.
           </p>
         </div>

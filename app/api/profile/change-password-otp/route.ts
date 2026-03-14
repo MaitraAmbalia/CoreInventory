@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     });
 
     await resend.emails.send({
-      from: "CoreInvent <onboarding@resend.dev>",
+      from: "CoreInventory <onboarding@resend.dev>",
       to: user.email,
       subject: "Profile Password Change Request",
       html: `
