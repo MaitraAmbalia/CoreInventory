@@ -1,21 +1,20 @@
+
+
 <h1 align="center">
   🌿 CoreInventory
 </h1>
 
 <p align="center">
-  <strong>The Ultimate Modern Inventory & Warehouse Management System</strong><br/>
-  <em>Engineered for speed, precision, and visual excellence</em>
+  <strong>A centralized, rule-based inventory lifecycle management system</strong><br/>
+  <em>Built with the premium Verdant Glass design language</em>
 </p>
-
 
 ---
 
 ## 🌟 Overview
 
-**CoreInvent** is a professional-grade Inventory Management System (IMS) designed to streamline warehouse operations, from stock receipts and internal moves to complex delivery workflows. Built with a focus on real-time accuracy and a premium user experience, it empowers organizations to maintain perfect visibility over their assets across multiple locations.
 **CoreInvent** is a professional-grade inventory and warehouse management system designed for modern logistics. It provides real-time visibility into stock levels, automated operation workflows, and detailed move history tracking across multiple warehouses.
 
-The interface adheres to the **Liquid Glass** design language: high-saturation purple accents, deep navy environments, and sophisticated frosted glass layers that create a sense of depth and modern elegance.
 The application features the **Verdant Glass** design system: high-contrast cream backgrounds with deep forest green accents, frosted glass panels, and smooth micro-interactions that make warehouse management feel effortless and premium.
 
 ---
@@ -42,26 +41,6 @@ The application features the **Verdant Glass** design system: high-contrast crea
 ## 🏗️ Architecture
 
 ```
-coreinventry/
-├── app/                        # Next.js App Router (16.1.6)
-│   ├── (auth)/                 # Authentication flows (Login, Signup)
-│   ├── (dashboard)/            # Main application shell
-│   │   ├── products/           # Product & Category management
-│   │   ├── operations/         # Stock moves: Receipts, Deliveries, Internal
-│   │   ├── adjustments/        # Inventory count & correction workflows
-│   │   ├── move-history/       # Full audit trail of all stock movements
-│   │   ├── users/              # RBAC User management
-│   │   └── page.tsx            # Analytics Dashboard with real-time KPIs
-│   ├── api/                    # Serverless API routes
-│   ├── globals.css             # Liquid Glass design tokens & Utility classes
-│   └── layout.tsx              # Root configuration & Font loading
-├── components/                 # Reusable UI components (Modals, Tables, Pills)
-├── lib/                        # Core logic, Prisma client, and JWT utils
-├── prisma/                     # Database Schema & Migrations (Prisma 7)
-│   └── schema.prisma           # Comprehensive PostgreSQL data model
-├── public/                     # Static assets & brand identity
-├── proxy.ts                    # Edge-compatible routing & auth middleware
-└── package.json                # Project dependencies & scripts
 coreinvent/
 ├── app/                        # Next.js 16 App Router
 │   ├── (auth)/                 # Authentication Flow (Login, OTP, Reset)
@@ -90,13 +69,8 @@ coreinvent/
 
 ## 🔐 Role-Based Access Control
 
-CoreInvent ensures data integrity through two distinct user roles:
 CoreInvent implements strict permissions for multi-user environments:
 
-| Role | Dashboard | Products | Operations | Adjustments | User Mgmt |
-|---|:---:|:---:|:---:|:---:|:---:|
-| **Manager** | ✅ Full Access | ✅ CRUD | ✅ Full Control | ✅ Full Control | ✅ Manage |
-| **Staff** | ✅ View | 📖 Read | ✅ Process | ✅ Create | ❌ |
 | Feature | Manager | Staff |
 |---|:---:|:---:|
 | **Dashboard** | ✅ Full | 📖 View |
@@ -108,16 +82,9 @@ CoreInvent implements strict permissions for multi-user environments:
 
 ---
 
-## 🔄 Inventory Lifecycle
 ## 🔄 Inventory Lifecycle & Business Rules
 
 ```mermaid
-graph LR
-    A[Receipt] -- In --> B[Warehouse/Location]
-    B -- Internal Move --> B
-    B -- Out --> C[Delivery]
-    B -- Correction --> D[Adjustment]
-    style B fill:#060F18,stroke:#A855F7,stroke-width:2px,color:#fff
 stateDiagram-v2
     [*] --> Draft: Create Operation
     Draft --> Waiting: Confirm Availability
@@ -129,10 +96,6 @@ stateDiagram-v2
     Cancelled --> [*]
 ```
 
-**Automated Stock Logic:**
-- **Double-Entry Bookkeeping**: Every move creates balanced `StockMoveHistory` records.
-- **Location Virtualization**: Supports Scrap locations and Vendor locations for full traceability.
-- **Smart Statuses**: Operations flow from `Draft` → `Waiting` → `Ready` → `Done`.
 **Automated side-effects:**
 - **Receipt**: Increases `qty_on_hand` at Destination Location.
 - **Delivery**: Decreases `qty_available` (Reservation) then `qty_on_hand` upon validation.
@@ -143,7 +106,6 @@ stateDiagram-v2
 
 ## 🚀 Quick Start
 
-## 🛠️ Tech Stack
 ### Prerequisites
 
 - **Node.js** ≥ 18
@@ -169,7 +131,6 @@ JWT_SECRET="your_secret_key"
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ```
 
-| Layer | Technology | Details |
 ### 3. Database Initialization
 
 ```bash
@@ -198,12 +159,6 @@ Open **[http://localhost:3000](http://localhost:3000)** to see the app.
 ### Inventory Operations
 | Method | Endpoint | Description |
 |---|---|---|
-| **Framework** | Next.js 16 | App Router, Server Components |
-| **Language** | TypeScript | Strong typing across stack |
-| **Database** | Prisma 7 | PostgreSQL with Neon Adapter |
-| **Styling** | Tailwind CSS 4 | Modern utility-first CSS |
-| **Auth** | JWT / Cookies | Secure session management |
-| **Icons** | Lucide React | Clean, scalable vector icons |
 | `GET` | `/api/products` | Paginated product listing with filters |
 | `POST` | `/api/operations` | Create Receipts/Deliveries |
 | `PATCH` | `/api/operations/:id` | Validate & process stock movement |
@@ -211,10 +166,8 @@ Open **[http://localhost:3000](http://localhost:3000)** to see the app.
 
 ---
 
-## 📄 Project Context
 ## 🛠️ Tech Stack
 
-This project was developed for professional inventory control, emphasizing high performance and state-of-the-art UI/UX patterns.
 | Layer | Technology |
 |---|---|
 | **Frontend** | [Next.js 16](https://nextjs.org/) (App Router) |
