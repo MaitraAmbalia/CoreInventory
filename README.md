@@ -88,48 +88,6 @@ graph LR
 
 ---
 
-## 🚀 Quick Start
-
-### Prerequisites
-
-- **Node.js** ≥ 20
-- **Postgres** (Neon recommended)
-- **npm** or **yarn**
-
-### 1. Clone & Install
-
-```bash
-git clone https://github.com/tirth-bhimani/coreinventry.git
-cd coreinventry
-npm install
-```
-
-### 2. Environment Configuration
-
-Create a `.env` file in the root:
-
-```bash
-DATABASE_URL="your-postgresql-connection-string"
-JWT_SECRET="your-secure-secret"
-RESEND_API_KEY="your-email-service-key"
-```
-
-### 3. Database Initialization
-
-```bash
-npx prisma generate
-npx prisma db push
-```
-
-### 4. Running the Development Server
-
-```bash
-npm run dev
-```
-
-Open **[http://localhost:3000](http://localhost:3000)** to access the dashboard.
-
----
 
 ## 🛠️ Tech Stack
 
