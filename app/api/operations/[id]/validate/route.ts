@@ -1,109 +1,108 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sql } from "@/lib/db";
+import prisma from "@/lib/db";
 
-// POST /api/operations/[id]/validate - Validate (finalize) an operation
 export async function POST(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
 
-    // Get operation
-    const [operation] = await sql`SELECT * FROM operations WHERE id = ${id}`;
+    const operation = await prisma.operation.findUnique({
+      where: { id },
+      include: { items: true },
+    });
+
     if (!operation) {
-      return NextResponse.json(
-        { error: "Operation not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Operation not found" }, { status: 404 });
     }
 
     if (operation.status === "Done") {
-      return NextResponse.json(
-        { error: "Operation is already validated" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Operation is already validated" }, { status: 400 });
     }
 
-    // Get items
-    const items = await sql`
-      SELECT * FROM operation_items WHERE operation_id = ${id}
-    `;
-
-    if (items.length === 0) {
-      return NextResponse.json(
-        { error: "Cannot validate an operation with no items" },
-        { status: 400 }
-      );
+    if (operation.items.length === 0) {
+      return NextResponse.json({ error: "Cannot validate an operation with no items" }, { status: 400 });
     }
 
-    // Process each item with double-entry logic
-    for (const item of items) {
-      const qty = parseFloat(item.done_qty) || parseFloat(item.demand_qty);
+    // Use Parameters to extract the correct interactive transaction client type
+    type TxClient = Parameters<Parameters<typeof prisma.$transaction>[0]>[0];
+    await prisma.$transaction(async (tx: TxClient) => {
+      for (const item of operation.items) {
+        const qty = Number(item.doneQty) > 0 ? Number(item.doneQty) : Number(item.demandQty);
+        if (qty <= 0) continue;
 
-      if (qty <= 0) continue;
+        // ─── Decrease stock at source location ───
+        if (operation.srcLocationId) {
+          const existingSrc = await tx.stockLevel.findFirst({
+            where: { productId: item.productId, locationId: operation.srcLocationId },
+          });
+          if (existingSrc) {
+            await tx.stockLevel.update({
+              where: { id: existingSrc.id },
+              data: {
+                qtyOnHand: { decrement: qty },
+                qtyAvailable: { decrement: qty },
+              },
+            });
+          }
+        }
 
-      // ─── Decrease stock at source location ───
-      if (operation.src_location_id) {
-        const existingSrc = await sql`
-          SELECT id, qty_on_hand, qty_available FROM stock_levels
-          WHERE product_id = ${item.product_id} AND location_id = ${operation.src_location_id}
-        `;
+        // ─── Increase stock at dest location ───
+        if (operation.destLocationId) {
+          const existingDest = await tx.stockLevel.findFirst({
+            where: { productId: item.productId, locationId: operation.destLocationId },
+          });
+          if (existingDest) {
+            await tx.stockLevel.update({
+              where: { id: existingDest.id },
+              data: {
+                qtyOnHand: { increment: qty },
+                qtyAvailable: { increment: qty },
+              },
+            });
+          } else {
+            await tx.stockLevel.create({
+              data: {
+                productId: item.productId,
+                locationId: operation.destLocationId,
+                qtyOnHand: qty,
+                qtyAvailable: qty,
+              },
+            });
+          }
+        }
 
-        if (existingSrc.length > 0) {
-          await sql`
-            UPDATE stock_levels SET
-              qty_on_hand = GREATEST(qty_on_hand - ${qty}, 0),
-              qty_available = GREATEST(qty_available - ${qty}, 0)
-            WHERE id = ${existingSrc[0].id}
-          `;
+        // ─── Create immutable move history record ───
+        await tx.stockMoveHistory.create({
+          data: {
+            productId: item.productId,
+            fromLocationId: operation.srcLocationId,
+            toLocationId: operation.destLocationId,
+            quantity: qty,
+            operationId: id,
+          },
+        });
+
+        // ─── Mark item done ───
+        if (Number(item.doneQty) === 0) {
+          await tx.operationItem.update({
+            where: { id: item.id },
+            data: { doneQty: qty },
+          });
         }
       }
 
-      // ─── Increase stock at destination location ───
-      if (operation.dest_location_id) {
-        const existingDest = await sql`
-          SELECT id FROM stock_levels
-          WHERE product_id = ${item.product_id} AND location_id = ${operation.dest_location_id}
-        `;
-
-        if (existingDest.length > 0) {
-          await sql`
-            UPDATE stock_levels SET
-              qty_on_hand = qty_on_hand + ${qty},
-              qty_available = qty_available + ${qty}
-            WHERE id = ${existingDest[0].id}
-          `;
-        } else {
-          await sql`
-            INSERT INTO stock_levels (product_id, location_id, qty_on_hand, qty_available)
-            VALUES (${item.product_id}, ${operation.dest_location_id}, ${qty}, ${qty})
-          `;
-        }
-      }
-
-      // ─── Create immutable move history record ───
-      await sql`
-        INSERT INTO stock_move_history (product_id, from_location_id, to_location_id, quantity, operation_id)
-        VALUES (${item.product_id}, ${operation.src_location_id}, ${operation.dest_location_id}, ${qty}, ${id})
-      `;
-    }
-
-    // Mark operation as Done
-    await sql`UPDATE operations SET status = 'Done' WHERE id = ${id}`;
-
-    // Also mark items done
-    await sql`UPDATE operation_items SET done_qty = demand_qty WHERE operation_id = ${id} AND done_qty = 0`;
-
-    return NextResponse.json({
-      success: true,
-      message: "Operation validated successfully",
+      // ─── Mark operation Done ───
+      await tx.operation.update({
+        where: { id },
+        data: { status: "Done" },
+      });
     });
+
+    return NextResponse.json({ success: true, message: "Operation validated successfully" });
   } catch (error) {
     console.error("Validate error:", error);
-    return NextResponse.json(
-      { error: "Failed to validate operation" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to validate operation" }, { status: 500 });
   }
 }

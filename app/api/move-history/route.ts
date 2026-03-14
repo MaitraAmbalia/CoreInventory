@@ -1,39 +1,47 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sql } from "@/lib/db";
+import prisma from "@/lib/db";
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const search = searchParams.get("search") || "";
 
-    let query = `
-      SELECT smh.*, p.name as product_name, p.sku_code,
-             fl.name as from_location_name, fl.short_code as from_location_code,
-             tl.name as to_location_name, tl.short_code as to_location_code,
-             o.ref_no as operation_ref
-      FROM stock_move_history smh
-      JOIN products p ON p.id = smh.product_id
-      LEFT JOIN locations fl ON fl.id = smh.from_location_id
-      LEFT JOIN locations tl ON tl.id = smh.to_location_id
-      LEFT JOIN operations o ON o.id = smh.operation_id
-    `;
+    const moves = await prisma.stockMoveHistory.findMany({
+      where: search
+        ? {
+            OR: [
+              { product: { name: { contains: search, mode: "insensitive" } } },
+              { product: { skuCode: { contains: search, mode: "insensitive" } } },
+              { operation: { refNo: { contains: search, mode: "insensitive" } } },
+            ],
+          }
+        : undefined,
+      include: {
+        product: { select: { name: true, skuCode: true } },
+        fromLocation: { select: { name: true, shortCode: true } },
+        toLocation: { select: { name: true, shortCode: true } },
+        operation: { select: { refNo: true } },
+      },
+      orderBy: { timestamp: "desc" },
+      take: 200,
+    });
 
-    const params: string[] = [];
+    const result = moves.map((m: typeof moves[number]) => ({
+      id: m.id,
+      product_name: m.product.name,
+      sku_code: m.product.skuCode,
+      from_location_name: m.fromLocation?.name ?? null,
+      from_location_code: m.fromLocation?.shortCode ?? null,
+      to_location_name: m.toLocation?.name ?? null,
+      to_location_code: m.toLocation?.shortCode ?? null,
+      quantity: m.quantity.toString(),
+      operation_ref: m.operation?.refNo ?? null,
+      timestamp: m.timestamp,
+    }));
 
-    if (search) {
-      query += ` WHERE LOWER(p.name) LIKE LOWER($1) OR LOWER(p.sku_code) LIKE LOWER($1) OR LOWER(o.ref_no) LIKE LOWER($1)`;
-      params.push(`%${search}%`);
-    }
-
-    query += " ORDER BY smh.timestamp DESC LIMIT 200";
-
-    const moves = await sql(query, params);
-    return NextResponse.json({ moves });
+    return NextResponse.json({ moves: result });
   } catch (error) {
     console.error("Move history GET error:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch move history" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to fetch move history" }, { status: 500 });
   }
 }

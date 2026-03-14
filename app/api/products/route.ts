@@ -1,60 +1,56 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sql } from "@/lib/db";
+import prisma from "@/lib/db";
 
-// GET /api/products - List all products with stock info
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const search = searchParams.get("search") || "";
-    const category = searchParams.get("category") || "";
+    const categoryId = searchParams.get("category") || "";
 
-    let query = `
-      SELECT p.*, c.name as category_name,
-        COALESCE(SUM(sl.qty_on_hand), 0)::decimal as total_stock
-      FROM products p
-      LEFT JOIN categories c ON c.id = p.category_id
-      LEFT JOIN stock_levels sl ON sl.product_id = p.id
-    `;
+    const products = await prisma.product.findMany({
+      where: {
+        AND: [
+          search
+            ? {
+                OR: [
+                  { name: { contains: search, mode: "insensitive" } },
+                  { skuCode: { contains: search, mode: "insensitive" } },
+                ],
+              }
+            : {},
+          categoryId ? { categoryId } : {},
+        ],
+      },
+      include: {
+        category: { select: { name: true } },
+        stockLevels: { select: { qtyOnHand: true } },
+      },
+      orderBy: { name: "asc" },
+    });
 
-    const conditions: string[] = [];
-    const params: string[] = [];
+    const result = products.map((p: typeof products[number]) => ({
+      id: p.id,
+      name: p.name,
+      sku_code: p.skuCode,
+      category_name: p.category?.name ?? null,
+      uom: p.uom,
+      low_stock_threshold: p.lowStockThreshold,
+      total_stock: p.stockLevels
+        .reduce((sum: number, sl: { qtyOnHand: unknown }) => sum + Number(sl.qtyOnHand), 0)
+        .toString(),
+    }));
 
-    if (search) {
-      conditions.push(
-        `(LOWER(p.name) LIKE LOWER($${params.length + 1}) OR LOWER(p.sku_code) LIKE LOWER($${params.length + 1}))`
-      );
-      params.push(`%${search}%`);
-    }
-
-    if (category) {
-      conditions.push(`p.category_id = $${params.length + 1}`);
-      params.push(category);
-    }
-
-    if (conditions.length > 0) {
-      query += " WHERE " + conditions.join(" AND ");
-    }
-
-    query += " GROUP BY p.id, c.name ORDER BY p.name ASC";
-
-    const products = await sql(query, params);
-
-    return NextResponse.json({ products });
+    return NextResponse.json({ products: result });
   } catch (error) {
     console.error("Products GET error:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch products" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to fetch products" }, { status: 500 });
   }
 }
 
-// POST /api/products - Create a new product
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, skuCode, categoryId, uom, description, lowStockThreshold } =
-      body;
+    const { name, skuCode, categoryId, uom, description, lowStockThreshold } = body;
 
     if (!name || !skuCode) {
       return NextResponse.json(
@@ -63,34 +59,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check SKU uniqueness
-    const existing = await sql`SELECT id FROM products WHERE sku_code = ${skuCode}`;
-    if (existing.length > 0) {
+    const existing = await prisma.product.findUnique({ where: { skuCode } });
+    if (existing) {
       return NextResponse.json(
         { error: "A product with this SKU code already exists" },
         { status: 409 }
       );
     }
 
-    const [product] = await sql`
-      INSERT INTO products (name, sku_code, category_id, uom, description, low_stock_threshold)
-      VALUES (
-        ${name},
-        ${skuCode},
-        ${categoryId || null},
-        ${uom || "Units"},
-        ${description || null},
-        ${lowStockThreshold || 10}
-      )
-      RETURNING *
-    `;
+    const product = await prisma.product.create({
+      data: {
+        name,
+        skuCode,
+        categoryId: categoryId || null,
+        uom: uom || "Units",
+        description: description || null,
+        lowStockThreshold: lowStockThreshold || 10,
+      },
+    });
 
     return NextResponse.json({ product }, { status: 201 });
   } catch (error) {
     console.error("Products POST error:", error);
-    return NextResponse.json(
-      { error: "Failed to create product" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to create product" }, { status: 500 });
   }
 }

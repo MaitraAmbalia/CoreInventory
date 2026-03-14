@@ -1,9 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
-import { db } from "./db";
-import { users } from "./schema";
-import { eq } from "drizzle-orm";
+import prisma from "./db";
 
 const JWT_SECRET = process.env.JWT_SECRET || "fallback_secret_change_me";
 const TOKEN_EXPIRY = "7d";
@@ -79,17 +77,10 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
   const payload = verifyToken(token);
   if (!payload) return null;
 
-  // Verify user still exists in database
-  const [user] = await db
-    .select({
-      id: users.id,
-      name: users.name,
-      email: users.email,
-      role: users.role,
-    })
-    .from(users)
-    .where(eq(users.id, payload.userId))
-    .limit(1);
+  const user = await prisma.user.findUnique({
+    where: { id: payload.userId },
+    select: { id: true, name: true, email: true, role: true },
+  });
 
   if (!user) return null;
 
@@ -97,24 +88,20 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
     id: user.id,
     name: user.name,
     email: user.email,
-    role: user.role,
+    role: user.role as "Manager" | "Staff",
   };
 }
 
 // ─── Require Auth (throws if not authenticated) ─────────
 export async function requireAuth(): Promise<AuthUser> {
   const user = await getCurrentUser();
-  if (!user) {
-    throw new Error("Unauthorized");
-  }
+  if (!user) throw new Error("Unauthorized");
   return user;
 }
 
 // ─── Require Manager Role ────────────────────────────────
 export async function requireManager(): Promise<AuthUser> {
   const user = await requireAuth();
-  if (user.role !== "Manager") {
-    throw new Error("Forbidden: Manager access required");
-  }
+  if (user.role !== "Manager") throw new Error("Forbidden: Manager access required");
   return user;
 }
