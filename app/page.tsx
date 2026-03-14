@@ -197,7 +197,7 @@ export default function LandingPage() {
           >
             <span style={{ fontFamily: "var(--font-outfit)", fontWeight: 600 }}>CoreInventory</span> is a double-entry inventory system that gives you
             real-time visibility into stock levels, warehouse operations, and
-            supply chain workflows — all in one place.
+            supply chain workflows all in one place.
           </p>
 
           <div

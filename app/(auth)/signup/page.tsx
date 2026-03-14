@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Mail, Lock, User, UserPlus, Loader2, Package } from "lucide-react";
+import { Mail, Lock, User, UserPlus, Loader2, Package, Eye, EyeOff } from "lucide-react";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -13,6 +13,8 @@ export default function SignupPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,7 +87,7 @@ export default function SignupPage() {
           </h1>
           <p style={{ color: "var(--text-muted)", fontSize: 14 }}>
             Get started with{" "}
-            <span style={{ fontSize: 24, fontWeight: 700, letterSpacing: "-0.03em", fontFamily: "var(--font-outfit)", color: "var(--text-primary)" }}>
+            <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: "-0.03em", fontFamily: "var(--font-outfit)", color: "var(--text-primary)" }}>
               CoreInventory
             </span>
           </p>
@@ -127,11 +129,11 @@ export default function SignupPage() {
                 id="signup-name"
                 type="text"
                 className="input-field"
-                placeholder="John Doe"
+                placeholder="Enter your name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                style={{ paddingLeft: 40 }}
+                style={{ paddingLeft: 40, fontSize: 13 }}
               />
             </div>
           </div>
@@ -177,15 +179,35 @@ export default function SignupPage() {
               />
               <input
                 id="signup-password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 className="input-field"
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
-                style={{ paddingLeft: 40 }}
+                style={{ paddingLeft: 40, paddingRight: 40 }}
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: "absolute",
+                  right: 12,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  background: "none",
+                  border: "none",
+                  padding: 4,
+                  cursor: "pointer",
+                  color: "var(--text-muted)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
             </div>
           </div>
 
@@ -204,15 +226,35 @@ export default function SignupPage() {
               />
               <input
                 id="signup-confirm-password"
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 className="input-field"
                 placeholder="••••••••"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 minLength={6}
-                style={{ paddingLeft: 40 }}
+                style={{ paddingLeft: 40, paddingRight: 40 }}
               />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                style={{
+                  position: "absolute",
+                  right: 12,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  background: "none",
+                  border: "none",
+                  padding: 4,
+                  cursor: "pointer",
+                  color: "var(--text-muted)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
             </div>
           </div>
 

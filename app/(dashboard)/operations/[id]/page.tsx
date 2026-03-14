@@ -13,6 +13,7 @@ import {
   User,
   Calendar,
   Hash,
+  XCircle,
 } from "lucide-react";
 import { formatDateTime, getStatusColor, getTypeColor } from "@/lib/utils";
 
@@ -49,6 +50,7 @@ export default function OperationDetailPage() {
   const [items, setItems] = useState<OperationItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [validating, setValidating] = useState(false);
+  const [canceling, setCanceling] = useState(false);
   const [error, setError] = useState("");
 
   const fetchData = async () => {
@@ -90,6 +92,31 @@ export default function OperationDetailPage() {
       setError("Something went wrong");
     } finally {
       setValidating(false);
+    }
+  };
+
+  const handleCancel = async () => {
+    if (!confirm("Are you sure you want to cancel this operation?")) return;
+
+    setCanceling(true);
+    setError("");
+
+    try {
+      const res = await fetch(`/api/operations/${id}/cancel`, {
+        method: "POST",
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Failed to cancel");
+        return;
+      }
+
+      fetchData();
+    } catch {
+      setError("Something went wrong");
+    } finally {
+      setCanceling(false);
     }
   };
 
@@ -179,11 +206,28 @@ export default function OperationDetailPage() {
               <Printer size={14} />
               Print
             </button>
-            {operation.status !== "Done" && (
+            {operation.status !== "Done" && operation.status !== "Cancelled" && (
+              <button
+                onClick={handleCancel}
+                className="btn-secondary"
+                disabled={canceling || validating}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  color: "var(--danger)",
+                  borderColor: "rgba(239, 68, 68, 0.3)",
+                }}
+              >
+                {canceling ? <Loader2 size={14} className="animate-spin" /> : <XCircle size={14} />}
+                {canceling ? "Canceling..." : "Cancel"}
+              </button>
+            )}
+            {operation.status !== "Done" && operation.status !== "Cancelled" && (
               <button
                 onClick={handleValidate}
                 className="btn-primary"
-                disabled={validating}
+                disabled={validating || canceling}
                 style={{ display: "flex", alignItems: "center", gap: 6 }}
               >
                 {validating ? (

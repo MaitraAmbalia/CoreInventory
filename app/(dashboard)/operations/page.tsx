@@ -88,19 +88,62 @@ export default function OperationsPage() {
             Manage inventory operations
           </p>
         </div>
-        <Link
-          href="/operations/new"
-          className="btn-primary"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 8,
-            textDecoration: "none",
-          }}
-        >
-          <Plus size={16} />
-          New Operation
-        </Link>
+        <div style={{ display: "flex", gap: 12 }}>
+          {(!typeFilter || typeFilter === "Receipt") && (
+            <Link
+              href="/operations/receipts/new"
+              className="btn-primary"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                textDecoration: "none",
+                background: typeFilter ? undefined : "var(--bg-secondary)",
+                color: typeFilter ? undefined : "var(--text-primary)",
+                border: typeFilter ? undefined : "1px solid var(--border-primary)",
+              }}
+            >
+              <Plus size={16} />
+              New Receipt
+            </Link>
+          )}
+          {(!typeFilter || typeFilter === "Delivery") && (
+            <Link
+              href="/operations/deliveries/new"
+              className="btn-primary"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                textDecoration: "none",
+                background: typeFilter ? undefined : "var(--bg-secondary)",
+                color: typeFilter ? undefined : "var(--text-primary)",
+                border: typeFilter ? undefined : "1px solid var(--border-primary)",
+              }}
+            >
+              <Plus size={16} />
+              New Delivery
+            </Link>
+          )}
+          {(!typeFilter || typeFilter === "Internal") && (
+            <Link
+              href="/operations/transfers/new"
+              className="btn-primary"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                textDecoration: "none",
+                background: typeFilter ? undefined : "var(--bg-secondary)",
+                color: typeFilter ? undefined : "var(--text-primary)",
+                border: typeFilter ? undefined : "1px solid var(--border-primary)",
+              }}
+            >
+              <Plus size={16} />
+              New Transfer
+            </Link>
+          )}
+        </div>
       </div>
 
       {}

@@ -24,17 +24,16 @@ interface LineItem {
   demandQty: number;
 }
 
-export default function NewOperationPage() {
+export default function NewDeliveryPage() {
   const router = useRouter();
   const [locations, setLocations] = useState<Location[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const [type, setType] = useState("Receipt");
   const [srcLocationId, setSrcLocationId] = useState("");
   const [destLocationId, setDestLocationId] = useState("");
-  const [contact, setContact] = useState("");
+  const [contact, setContact] = useState(""); // Customer
   const [scheduledDate, setScheduledDate] = useState("");
   const [items, setItems] = useState<LineItem[]>([
     { productId: "", demandQty: 1 },
@@ -45,52 +44,23 @@ export default function NewOperationPage() {
       fetch("/api/locations").then((r) => r.json()),
       fetch("/api/products").then((r) => r.json()),
     ]).then(([locData, prodData]) => {
-      setLocations(locData.locations || []);
+      const locs = locData.locations || [];
+      setLocations(locs);
       setProducts(
-        (prodData.products || []).map((p: { id: string; name: string; sku_code: string }) => ({
+        (prodData.products || []).map((p: any) => ({
           id: p.id,
           name: p.name,
           sku_code: p.sku_code,
         }))
       );
 
-
-      const locs = locData.locations || [];
-      const inputLoc = locs.find((l: Location) => l.short_code === "WH/INPUT");
-      const outputLoc = locs.find((l: Location) => l.short_code === "WH/OUTPUT");
       const stockLoc = locs.find((l: Location) => l.short_code === "WH/STOCK");
+      const outputLoc = locs.find((l: Location) => l.short_code === "WH/OUTPUT");
 
-      if (inputLoc && stockLoc) {
-        setSrcLocationId(inputLoc.id);
-        setDestLocationId(stockLoc.id);
-      }
+      if (stockLoc) setSrcLocationId(stockLoc.id);
+      if (outputLoc) setDestLocationId(outputLoc.id);
     });
   }, []);
-
-
-  useEffect(() => {
-    const inputLoc = locations.find((l) => l.short_code === "WH/INPUT");
-    const outputLoc = locations.find((l) => l.short_code === "WH/OUTPUT");
-    const stockLoc = locations.find((l) => l.short_code === "WH/STOCK");
-    const scrapLoc = locations.find((l) => l.short_code === "WH/SCRAP");
-
-    switch (type) {
-      case "Receipt":
-        if (inputLoc) setSrcLocationId(inputLoc.id);
-        if (stockLoc) setDestLocationId(stockLoc.id);
-        break;
-      case "Delivery":
-        if (stockLoc) setSrcLocationId(stockLoc.id);
-        if (outputLoc) setDestLocationId(outputLoc.id);
-        break;
-      case "Adjustment":
-        if (stockLoc) setSrcLocationId(stockLoc.id);
-        if (scrapLoc) setDestLocationId(scrapLoc.id);
-        break;
-      default:
-        break;
-    }
-  }, [type, locations]);
 
   const addItem = () => {
     setItems([...items, { productId: "", demandQty: 1 }]);
@@ -123,7 +93,7 @@ export default function NewOperationPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          type,
+          type: "Delivery",
           srcLocationId,
           destLocationId,
           contact: contact || null,
@@ -139,7 +109,7 @@ export default function NewOperationPage() {
         return;
       }
 
-      router.push("/operations");
+      router.push("/operations?type=Delivery");
     } catch {
       setError("Something went wrong");
     } finally {
@@ -149,10 +119,9 @@ export default function NewOperationPage() {
 
   return (
     <div className="animate-fade-in" style={{ maxWidth: 720 }}>
-      {}
       <div style={{ marginBottom: 24 }}>
         <Link
-          href="/operations"
+          href="/operations?type=Delivery"
           style={{
             display: "inline-flex",
             alignItems: "center",
@@ -164,7 +133,7 @@ export default function NewOperationPage() {
           }}
         >
           <ArrowLeft size={14} />
-          Back to Operations
+          Back to Deliveries
         </Link>
         <h1
           style={{
@@ -173,7 +142,7 @@ export default function NewOperationPage() {
             letterSpacing: "-0.02em",
           }}
         >
-          New Operation
+          New Delivery
         </h1>
       </div>
 
@@ -194,7 +163,6 @@ export default function NewOperationPage() {
       )}
 
       <form onSubmit={handleSubmit}>
-        {}
         <div className="glass-card" style={{ padding: 24, marginBottom: 16 }}>
           <h3
             style={{
@@ -204,7 +172,7 @@ export default function NewOperationPage() {
               color: "var(--text-secondary)",
             }}
           >
-            Operation Details
+            Delivery Details
           </h3>
           <div
             style={{
@@ -214,37 +182,21 @@ export default function NewOperationPage() {
             }}
           >
             <div>
-              <label className="form-label">Operation Type *</label>
-              <select
-                className="select-field"
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-              >
-                <option value="Receipt">Receipt (Incoming)</option>
-                <option value="Delivery">Delivery (Outgoing)</option>
-                <option value="Internal">Internal Transfer</option>
-                <option value="Adjustment">Adjustment</option>
-              </select>
-            </div>
-            <div>
-              <label className="form-label">
-                {type === "Receipt"
-                  ? "Vendor"
-                  : type === "Delivery"
-                    ? "Customer"
-                    : "Contact"}
-              </label>
+              <label className="form-label">Customer</label>
               <input
                 className="input-field"
-                placeholder={
-                  type === "Receipt"
-                    ? "Vendor name"
-                    : type === "Delivery"
-                      ? "Customer name"
-                      : "Contact name"
-                }
+                placeholder="Customer name"
                 value={contact}
                 onChange={(e) => setContact(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="form-label">Scheduled Date</label>
+              <input
+                className="input-field"
+                type="datetime-local"
+                value={scheduledDate}
+                onChange={(e) => setScheduledDate(e.target.value)}
               />
             </div>
             <div>
@@ -265,7 +217,7 @@ export default function NewOperationPage() {
               </select>
             </div>
             <div>
-              <label className="form-label">Destination Location *</label>
+              <label className="form-label">Destination Location (Customer) *</label>
               <select
                 className="select-field"
                 value={destLocationId}
@@ -281,19 +233,9 @@ export default function NewOperationPage() {
                 ))}
               </select>
             </div>
-            <div>
-              <label className="form-label">Scheduled Date</label>
-              <input
-                className="input-field"
-                type="datetime-local"
-                value={scheduledDate}
-                onChange={(e) => setScheduledDate(e.target.value)}
-              />
-            </div>
           </div>
         </div>
 
-        {}
         <div className="glass-card" style={{ padding: 24, marginBottom: 16 }}>
           <div
             style={{
@@ -399,7 +341,6 @@ export default function NewOperationPage() {
           ))}
         </div>
 
-        {}
         <div
           style={{
             display: "flex",
@@ -408,7 +349,7 @@ export default function NewOperationPage() {
           }}
         >
           <Link
-            href="/operations"
+            href="/operations?type=Delivery"
             className="btn-secondary"
             style={{ textDecoration: "none" }}
           >
@@ -425,7 +366,7 @@ export default function NewOperationPage() {
             ) : (
               <Save size={16} />
             )}
-            {loading ? "Creating..." : "Create Operation"}
+            {loading ? "Creating..." : "Create Delivery"}
           </button>
         </div>
       </form>

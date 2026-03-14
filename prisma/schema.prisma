@@ -25,6 +25,7 @@ enum OperationStatus {
   Waiting
   Ready
   Done
+  Cancelled
 }
 
 // Users
