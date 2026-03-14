@@ -17,6 +17,9 @@ interface MoveRecord {
   timestamp: string;
 }
 
+
+import { TableSkeleton } from "@/components/skeletons";
+
 export default function MoveHistoryPage() {
   const [moves, setMoves] = useState<MoveRecord[]>([]);
   const [search, setSearch] = useState("");
@@ -52,6 +55,8 @@ export default function MoveHistoryPage() {
 
     return "internal";
   };
+
+  if (loading) return <TableSkeleton />;
 
   return (
     <div className="animate-fade-in">

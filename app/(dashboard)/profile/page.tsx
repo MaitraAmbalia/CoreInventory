@@ -12,6 +12,8 @@ interface UserProfile {
   role: string;
 }
 
+import { FormSkeleton } from "@/components/skeletons";
+
 export default function ProfilePage() {
   const router = useRouter();
   const [user, setUser] = useState<UserProfile | null>(null);
@@ -118,11 +120,7 @@ export default function ProfilePage() {
   };
 
   if (loading) {
-    return (
-      <div style={{ padding: 40, color: "var(--text-muted)", display: "flex", gap: 8, alignItems: "center" }}>
-        <Loader2 size={16} className="animate-spin" /> Loading profile...
-      </div>
-    );
+    return <FormSkeleton />;
   }
 
   if (!user) return null;

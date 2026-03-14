@@ -1,1 +1,28 @@
-const fs = require('fs'); let c = fs.readFileSync('D:/Odoo/app/(dashboard)/operations/[id]/page.tsx', 'utf8'); c = c.replace('  const handlePrint = () => {\\r\\n    window.print();\\r\\n  };', \  const handlePrint = async () => {\\n    if (!printRef.current) return;\\n    const elem = printRef.current;\\n    try {\\n      const clone = elem.cloneNode(true);\\n      clone.style.background = 'white';\\n      clone.style.color = 'black';\\n      clone.style.padding = '40px';\\n      clone.style.width = '800px';\\n      clone.style.position = 'absolute';\\n      clone.style.left = '-9999px';\\n      clone.querySelectorAll('*').forEach(n => { n.style.color = 'black'; });\\n      document.body.appendChild(clone);\\n      const canvas = await html2canvas(clone, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });\\n      document.body.removeChild(clone);\\n      const imgData = canvas.toDataURL('image/png');\\n      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });\\n      const pdfWidth = pdf.internal.pageSize.getWidth();\\n      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;\\n      pdf.addImage(imgData, 'PNG', 0, 10, pdfWidth, pdfHeight);\\n      pdf.save('Receipt.pdf');\\n    } catch (e) {\\n      console.error('Print generation failed', e);\\n    }\\n  };\); fs.writeFileSync('D:/Odoo/app/(dashboard)/operations/[id]/page.tsx', c);
+
+const fs = require("fs");
+const path = require("path");
+
+function replaceLoading(filePath, relativeDepth) {
+  let content = fs.readFileSync(filePath, "utf8");
+  
+  // Create relative import path for loading.tsx
+  const importStatement = `import DashboardLoading from "${"../".repeat(relativeDepth)}loading";\n`;
+  
+  // Add import if not present
+  if (!content.includes("DashboardLoading")) {
+    content = content.replace("export default function ", importStatement + "export default function ");
+  }
+
+  // Replace manual loading block with DashboardLoading
+  content = content.replace(/if\s*\(loading\)\s*{\s*return\s*\([\s\S]*?<\/[^>]+>\s*\);\s*}/, "if (loading) {\n    return <DashboardLoading />;\n  }");
+  
+  fs.writeFileSync(filePath, content);
+}
+
+replaceLoading("app/(dashboard)/analytics/page.tsx", 1);
+replaceLoading("app/(dashboard)/operations/[id]/page.tsx", 2);
+replaceLoading("app/(dashboard)/products/[id]/page.tsx", 2);
+replaceLoading("app/(dashboard)/profile/page.tsx", 1);
+replaceLoading("app/(dashboard)/settings/warehouses/page.tsx", 2);
+console.log("Done");
+

@@ -40,6 +40,8 @@ interface OperationItem {
   done_qty: string;
 }
 
+import { FormSkeleton } from "@/components/skeletons";
+
 export default function OperationDetailPage() {
   const params = useParams();
   const router = useRouter();
@@ -125,11 +127,7 @@ export default function OperationDetailPage() {
   };
 
   if (loading) {
-    return (
-      <div style={{ padding: 40, color: "var(--text-muted)" }}>
-        Loading operation...
-      </div>
-    );
+    return <FormSkeleton />;
   }
 
   if (!operation) {

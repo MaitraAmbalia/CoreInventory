@@ -15,6 +15,9 @@ interface Operation {
   src_location_name: string | null;
 }
 
+
+import { TableSkeleton } from "@/components/skeletons";
+
 export default function AdjustmentsPage() {
   const [adjustments, setAdjustments] = useState<Operation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,6 +29,8 @@ export default function AdjustmentsPage() {
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
+
+  if (loading) return <TableSkeleton />;
 
   return (
     <div className="animate-fade-in">

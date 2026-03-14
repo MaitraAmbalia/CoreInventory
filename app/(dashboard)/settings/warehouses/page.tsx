@@ -18,6 +18,8 @@ type Warehouse = {
   locations: Location[];
 };
 
+import { TableSkeleton } from "@/components/skeletons";
+
 export default function WarehouseSettingsPage() {
   const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
   const [loading, setLoading] = useState(true);
@@ -120,12 +122,7 @@ export default function WarehouseSettingsPage() {
   );
 
   if (loading) {
-    return (
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: 80, color: "var(--text-muted)" }}>
-        <Loader2 size={20} className="animate-spin" style={{ marginRight: 10 }} />
-        Loading warehouses...
-      </div>
-    );
+    return <TableSkeleton />;
   }
 
   return (

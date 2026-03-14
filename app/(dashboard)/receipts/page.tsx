@@ -17,6 +17,9 @@ interface Operation {
   dest_location_name: string | null;
 }
 
+
+import { TableSkeleton } from "@/components/skeletons";
+
 export default function ReceiptsPage() {
   const [operations, setOperations] = useState<Operation[]>([]);
   const [search, setSearch] = useState("");
@@ -45,6 +48,8 @@ export default function ReceiptsPage() {
     const timer = setTimeout(fetchReceipts, 300);
     return () => clearTimeout(timer);
   }, [search]);
+
+  if (loading) return <TableSkeleton />;
 
   return (
     <div className="animate-fade-in">

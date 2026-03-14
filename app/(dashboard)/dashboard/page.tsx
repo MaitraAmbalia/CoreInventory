@@ -57,6 +57,10 @@ interface DashboardData {
 const OPERATION_TYPES = ["Receipt", "Delivery", "Internal", "Adjustment"];
 const OPERATION_STATUSES = ["Draft", "Waiting", "Ready", "Done"];
 
+
+
+import { DashboardSkeleton } from "@/components/skeletons";
+
 export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -96,14 +100,7 @@ export default function DashboardPage() {
   };
 
   if (loading && !data) {
-    return (
-      <div style={{ padding: 40 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12, color: "var(--text-muted)" }}>
-          <div className="animate-spin"><Activity size={20} /></div>
-          Loading dashboard...
-        </div>
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   const kpiCards = [
@@ -142,7 +139,14 @@ export default function DashboardPage() {
     <div className="animate-fade-in">
       {}
       <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: 26, fontWeight: 700, letterSpacing: "-0.02em", marginBottom: 4 }}>
+        <h1
+          style={{
+            fontSize: 26,
+            fontWeight: 700,
+            letterSpacing: "-0.02em",
+            marginBottom: 4,
+          }}
+        >
           Dashboard
         </h1>
         <p style={{ color: "var(--text-muted)", fontSize: 14 }}>
@@ -168,15 +172,37 @@ export default function DashboardPage() {
             key={card.label}
             className="kpi-card"
             style={{
-              borderColor: (card as { alert?: boolean }).alert ? "rgba(245, 158, 11, 0.3)" : undefined,
+              borderColor: (card as { alert?: boolean }).alert
+                ? "rgba(245, 158, 11, 0.3)"
+                : undefined,
             }}
           >
-            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "flex-start",
+                justifyContent: "space-between",
+              }}
+            >
               <div>
-                <p style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 8, fontWeight: 500 }}>
+                <p
+                  style={{
+                    fontSize: 13,
+                    color: "var(--text-muted)",
+                    marginBottom: 8,
+                    fontWeight: 500,
+                  }}
+                >
                   {card.label}
                 </p>
-                <p style={{ fontSize: 32, fontWeight: 700, letterSpacing: "-0.02em", lineHeight: 1 }}>
+                <p
+                  style={{
+                    fontSize: 32,
+                    fontWeight: 700,
+                    letterSpacing: "-0.02em",
+                    lineHeight: 1,
+                  }}
+                >
                   {card.value}
                 </p>
               </div>
@@ -211,56 +237,188 @@ export default function DashboardPage() {
         <Link
           href="/receipts"
           className="glass-card"
-          style={{ padding: 24, display: "block", color: "inherit", textDecoration: "none", cursor: "pointer" }}
+          style={{
+            padding: 24,
+            display: "block",
+            color: "inherit",
+            textDecoration: "none",
+            cursor: "pointer",
+          }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-            <div style={{ width: 36, height: 36, borderRadius: "var(--radius-md)", background: "rgba(16, 185, 129, 0.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              marginBottom: 20,
+            }}
+          >
+            <div
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: "var(--radius-md)",
+                background: "rgba(16, 185, 129, 0.12)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
               <ArrowDownToLine size={18} color="#10b981" />
             </div>
             <div>
               <h3 style={{ fontSize: 16, fontWeight: 600 }}>Receipts</h3>
-              <p style={{ fontSize: 12, color: "var(--text-muted)" }}>Incoming stock overview</p>
+              <p style={{ fontSize: 12, color: "var(--text-muted)" }}>
+                Incoming stock overview
+              </p>
             </div>
           </div>
           <div style={{ display: "flex", gap: 16 }}>
-            <div style={{ flex: 1, background: "rgba(239, 68, 68, 0.08)", borderRadius: "var(--radius-md)", padding: "16px", textAlign: "center", border: "1px solid rgba(239, 68, 68, 0.15)" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginBottom: 8, color: "var(--danger)", fontSize: 12, fontWeight: 600 }}>
+            <div
+              style={{
+                flex: 1,
+                background: "rgba(239, 68, 68, 0.08)",
+                borderRadius: "var(--radius-md)",
+                padding: "16px",
+                textAlign: "center",
+                border: "1px solid rgba(239, 68, 68, 0.15)",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 6,
+                  marginBottom: 8,
+                  color: "var(--danger)",
+                  fontSize: 12,
+                  fontWeight: 600,
+                }}
+              >
                 <Timer size={14} /> LATE
               </div>
-              <p style={{ fontSize: 28, fontWeight: 700 }}>{data?.lateReceipts || 0}</p>
+              <p style={{ fontSize: 28, fontWeight: 700 }}>
+                {data?.lateReceipts || 0}
+              </p>
             </div>
-            <div style={{ flex: 1, background: "rgba(245, 158, 11, 0.08)", borderRadius: "var(--radius-md)", padding: "16px", textAlign: "center", border: "1px solid rgba(245, 158, 11, 0.15)" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginBottom: 8, color: "var(--warning)", fontSize: 12, fontWeight: 600 }}>
+            <div
+              style={{
+                flex: 1,
+                background: "rgba(245, 158, 11, 0.08)",
+                borderRadius: "var(--radius-md)",
+                padding: "16px",
+                textAlign: "center",
+                border: "1px solid rgba(245, 158, 11, 0.15)",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 6,
+                  marginBottom: 8,
+                  color: "var(--warning)",
+                  fontSize: 12,
+                  fontWeight: 600,
+                }}
+              >
                 <Clock size={14} /> WAITING
               </div>
-              <p style={{ fontSize: 28, fontWeight: 700 }}>{data?.waitingReceipts || 0}</p>
+              <p style={{ fontSize: 28, fontWeight: 700 }}>
+                {data?.waitingReceipts || 0}
+              </p>
             </div>
           </div>
         </Link>
 
         {}
         <div className="glass-card" style={{ padding: 24 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-            <div style={{ width: 36, height: 36, borderRadius: "var(--radius-md)", background: "rgba(139, 92, 246, 0.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              marginBottom: 20,
+            }}
+          >
+            <div
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: "var(--radius-md)",
+                background: "rgba(139, 92, 246, 0.12)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
               <Truck size={18} color="#8b5cf6" />
             </div>
             <div>
               <h3 style={{ fontSize: 16, fontWeight: 600 }}>Deliveries</h3>
-              <p style={{ fontSize: 12, color: "var(--text-muted)" }}>Outgoing stock overview</p>
+              <p style={{ fontSize: 12, color: "var(--text-muted)" }}>
+                Outgoing stock overview
+              </p>
             </div>
           </div>
           <div style={{ display: "flex", gap: 16 }}>
-            <div style={{ flex: 1, background: "rgba(239, 68, 68, 0.08)", borderRadius: "var(--radius-md)", padding: "16px", textAlign: "center", border: "1px solid rgba(239, 68, 68, 0.15)" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginBottom: 8, color: "var(--danger)", fontSize: 12, fontWeight: 600 }}>
+            <div
+              style={{
+                flex: 1,
+                background: "rgba(239, 68, 68, 0.08)",
+                borderRadius: "var(--radius-md)",
+                padding: "16px",
+                textAlign: "center",
+                border: "1px solid rgba(239, 68, 68, 0.15)",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 6,
+                  marginBottom: 8,
+                  color: "var(--danger)",
+                  fontSize: 12,
+                  fontWeight: 600,
+                }}
+              >
                 <Timer size={14} /> LATE
               </div>
-              <p style={{ fontSize: 28, fontWeight: 700 }}>{data?.lateDeliveries || 0}</p>
+              <p style={{ fontSize: 28, fontWeight: 700 }}>
+                {data?.lateDeliveries || 0}
+              </p>
             </div>
-            <div style={{ flex: 1, background: "rgba(245, 158, 11, 0.08)", borderRadius: "var(--radius-md)", padding: "16px", textAlign: "center", border: "1px solid rgba(245, 158, 11, 0.15)" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginBottom: 8, color: "var(--warning)", fontSize: 12, fontWeight: 600 }}>
+            <div
+              style={{
+                flex: 1,
+                background: "rgba(245, 158, 11, 0.08)",
+                borderRadius: "var(--radius-md)",
+                padding: "16px",
+                textAlign: "center",
+                border: "1px solid rgba(245, 158, 11, 0.15)",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 6,
+                  marginBottom: 8,
+                  color: "var(--warning)",
+                  fontSize: 12,
+                  fontWeight: 600,
+                }}
+              >
                 <Clock size={14} /> WAITING
               </div>
-              <p style={{ fontSize: 28, fontWeight: 700 }}>{data?.waitingDeliveries || 0}</p>
+              <p style={{ fontSize: 28, fontWeight: 700 }}>
+                {data?.waitingDeliveries || 0}
+              </p>
             </div>
           </div>
         </div>
@@ -268,7 +426,16 @@ export default function DashboardPage() {
 
       {}
       <div className="glass-card" style={{ padding: 24 }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 12 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: 16,
+            flexWrap: "wrap",
+            gap: 12,
+          }}
+        >
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <TrendingUp size={18} color="var(--accent-primary)" />
             <h3 style={{ fontSize: 16, fontWeight: 600 }}>Recent Operations</h3>
@@ -306,16 +473,32 @@ export default function DashboardPage() {
           }}
         >
           <div style={{ position: "relative", minWidth: 140 }}>
-            <Filter size={14} style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)", zIndex: 1 }} />
+            <Filter
+              size={14}
+              style={{
+                position: "absolute",
+                left: 10,
+                top: "50%",
+                transform: "translateY(-50%)",
+                color: "var(--text-muted)",
+                zIndex: 1,
+              }}
+            />
             <select
               className="select-field"
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              style={{ paddingLeft: 32, fontSize: 13, padding: "8px 32px 8px 32px" }}
+              style={{
+                paddingLeft: 32,
+                fontSize: 13,
+                padding: "8px 32px 8px 32px",
+              }}
             >
               <option value="">All Types</option>
               {OPERATION_TYPES.map((t) => (
-                <option key={t} value={t}>{t}</option>
+                <option key={t} value={t}>
+                  {t}
+                </option>
               ))}
             </select>
           </div>
@@ -329,7 +512,9 @@ export default function DashboardPage() {
             >
               <option value="">All Statuses</option>
               {OPERATION_STATUSES.map((s) => (
-                <option key={s} value={s}>{s}</option>
+                <option key={s} value={s}>
+                  {s}
+                </option>
               ))}
             </select>
           </div>
@@ -344,7 +529,9 @@ export default function DashboardPage() {
               >
                 <option value="">All Warehouses</option>
                 {data.warehouses.map((w) => (
-                  <option key={w.id} value={w.id}>{w.name} ({w.shortCode})</option>
+                  <option key={w.id} value={w.id}>
+                    {w.name} ({w.shortCode})
+                  </option>
                 ))}
               </select>
             </div>
@@ -369,20 +556,36 @@ export default function DashboardPage() {
                 {data.recentOperations.map((op) => (
                   <tr
                     key={op.id}
-                    onClick={() => (window.location.href = `/operations/${op.id}`)}
+                    onClick={() =>
+                      (window.location.href = `/operations/${op.id}`)
+                    }
                   >
-                    <td style={{ fontWeight: 600, fontFamily: "var(--font-mono)", fontSize: 13 }}>
+                    <td
+                      style={{
+                        fontWeight: 600,
+                        fontFamily: "var(--font-mono)",
+                        fontSize: 13,
+                      }}
+                    >
                       {op.ref_no}
                     </td>
                     <td>
-                      <span className={`status-badge ${getTypeColor(op.type)}`}>{op.type}</span>
+                      <span className={`status-badge ${getTypeColor(op.type)}`}>
+                        {op.type}
+                      </span>
                     </td>
-                    <td style={{ color: "var(--text-secondary)" }}>{op.contact || "—"}</td>
+                    <td style={{ color: "var(--text-secondary)" }}>
+                      {op.contact || "—"}
+                    </td>
                     <td style={{ color: "var(--text-muted)", fontSize: 12 }}>
                       {op.src_location || "—"} → {op.dest_location || "—"}
                     </td>
                     <td>
-                      <span className={`status-badge ${getStatusColor(op.status)}`}>{op.status}</span>
+                      <span
+                        className={`status-badge ${getStatusColor(op.status)}`}
+                      >
+                        {op.status}
+                      </span>
                     </td>
                     <td style={{ color: "var(--text-muted)", fontSize: 13 }}>
                       {formatDateTime(op.scheduled_date)}
@@ -395,9 +598,15 @@ export default function DashboardPage() {
         ) : (
           <div className="empty-state">
             <Activity size={40} />
-            <p>{hasFilters ? "No operations match these filters" : "No recent operations"}</p>
+            <p>
+              {hasFilters
+                ? "No operations match these filters"
+                : "No recent operations"}
+            </p>
             <p style={{ fontSize: 13, marginTop: 4 }}>
-              {hasFilters ? "Try adjusting your filters" : "Create a receipt or delivery to get started"}
+              {hasFilters
+                ? "Try adjusting your filters"
+                : "Create a receipt or delivery to get started"}
             </p>
           </div>
         )}

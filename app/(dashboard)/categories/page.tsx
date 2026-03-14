@@ -19,6 +19,9 @@ interface Category {
   _count?: { products: number };
 }
 
+
+import { TableSkeleton } from "@/components/skeletons";
+
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -111,6 +114,8 @@ export default function CategoriesPage() {
       setError("Failed to delete category");
     }
   };
+
+  if (loading) return <TableSkeleton />;
 
   return (
     <div className="animate-fade-in">

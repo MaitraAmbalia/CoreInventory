@@ -60,6 +60,8 @@ const statusColors: Record<string, string> = {
   Done: "#10b981",
 };
 
+import { DashboardSkeleton } from "@/components/skeletons";
+
 export default function AnalyticsPage() {
   const router = useRouter();
   const [data, setData] = useState<AnalyticsData | null>(null);
@@ -88,12 +90,7 @@ export default function AnalyticsPage() {
   }, [router]);
 
   if (loading) {
-    return (
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: 80, color: "var(--text-muted)" }}>
-        <Loader2 size={24} className="animate-spin" style={{ marginRight: 12 }} />
-        Loading analytics...
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   if (error || !data) {

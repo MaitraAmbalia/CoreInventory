@@ -25,6 +25,9 @@ interface Operation {
   dest_location_name: string | null;
 }
 
+
+import { TableSkeleton } from "@/components/skeletons";
+
 export default function OperationsPage() {
   const searchParams = useSearchParams();
   const typeParam = searchParams.get("type") || "";
@@ -57,8 +60,12 @@ export default function OperationsPage() {
   }, [search, typeFilter, statusFilter]);
 
   const pageTitle = typeFilter
-    ? `${typeFilter}s`
+    ? typeFilter === "Delivery"
+      ? "Deliveries"
+      : `${typeFilter}s`
     : "All Operations";
+
+  if (loading) return <TableSkeleton />;
 
   return (
     <div className="animate-fade-in">
@@ -100,7 +107,9 @@ export default function OperationsPage() {
                 textDecoration: "none",
                 background: typeFilter ? undefined : "var(--bg-secondary)",
                 color: typeFilter ? undefined : "var(--text-primary)",
-                border: typeFilter ? undefined : "1px solid var(--border-primary)",
+                border: typeFilter
+                  ? undefined
+                  : "1px solid var(--border-primary)",
               }}
             >
               <Plus size={16} />
@@ -118,7 +127,9 @@ export default function OperationsPage() {
                 textDecoration: "none",
                 background: typeFilter ? undefined : "var(--bg-secondary)",
                 color: typeFilter ? undefined : "var(--text-primary)",
-                border: typeFilter ? undefined : "1px solid var(--border-primary)",
+                border: typeFilter
+                  ? undefined
+                  : "1px solid var(--border-primary)",
               }}
             >
               <Plus size={16} />
@@ -136,7 +147,9 @@ export default function OperationsPage() {
                 textDecoration: "none",
                 background: typeFilter ? undefined : "var(--bg-secondary)",
                 color: typeFilter ? undefined : "var(--text-primary)",
-                border: typeFilter ? undefined : "1px solid var(--border-primary)",
+                border: typeFilter
+                  ? undefined
+                  : "1px solid var(--border-primary)",
               }}
             >
               <Plus size={16} />
@@ -254,9 +267,7 @@ export default function OperationsPage() {
                       {op.ref_no}
                     </td>
                     <td>
-                      <span
-                        className={`status-badge ${getTypeColor(op.type)}`}
-                      >
+                      <span className={`status-badge ${getTypeColor(op.type)}`}>
                         {op.type}
                       </span>
                     </td>
@@ -264,11 +275,10 @@ export default function OperationsPage() {
                       {op.contact || "—"}
                     </td>
                     <td style={{ fontSize: 13, color: "var(--text-muted)" }}>
-                      {op.src_location_name || "—"} → {op.dest_location_name || "—"}
+                      {op.src_location_name || "—"} →{" "}
+                      {op.dest_location_name || "—"}
                     </td>
-                    <td
-                      style={{ color: "var(--text-muted)", fontSize: 13 }}
-                    >
+                    <td style={{ color: "var(--text-muted)", fontSize: 13 }}>
                       {formatDate(op.scheduled_date)}
                     </td>
                     <td>

@@ -27,6 +27,8 @@ interface StockLevel {
   qty_available: string;
 }
 
+import { FormSkeleton } from "@/components/skeletons";
+
 export default function ProductDetailPage() {
   const router = useRouter();
   const params = useParams();
@@ -115,11 +117,7 @@ export default function ProductDetailPage() {
   };
 
   if (loading) {
-    return (
-      <div style={{ padding: 40, color: "var(--text-muted)" }}>
-        Loading product...
-      </div>
-    );
+    return <FormSkeleton />;
   }
 
   return (

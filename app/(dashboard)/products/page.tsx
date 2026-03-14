@@ -25,6 +25,9 @@ interface Category {
   name: string;
 }
 
+
+import { TableSkeleton } from "@/components/skeletons";
+
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -65,6 +68,8 @@ export default function ProductsPage() {
   const isLowStock = (product: Product) =>
     parseFloat(product.total_stock) <= product.low_stock_threshold &&
     parseFloat(product.total_stock) > 0;
+
+  if (loading) return <TableSkeleton />;
 
   return (
     <div className="animate-fade-in">

@@ -11,6 +11,8 @@ type UserType = {
   createdAt: string;
 };
 
+import { TableSkeleton } from "@/components/skeletons";
+
 export default function UsersPage() {
   const [users, setUsers] = useState<UserType[]>([]);
   const [loading, setLoading] = useState(true);
@@ -71,7 +73,7 @@ export default function UsersPage() {
       u.email.toLowerCase().includes(search.toLowerCase())
   );
 
-  if (loading) return <div className="p-8 text-slate-400 font-mono">Loading users...</div>;
+  if (loading) return <TableSkeleton />;
   if (error) return <div className="p-8 text-red-400 font-mono text-xl">{error}</div>;
 
   return (
