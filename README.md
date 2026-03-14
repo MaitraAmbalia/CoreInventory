@@ -149,8 +149,3 @@ Open **[http://localhost:3000](http://localhost:3000)** to access the dashboard.
 This project was developed for professional inventory control, emphasizing high performance and state-of-the-art UI/UX patterns.
 
 ---
-
-<p align="center">
-  <strong>Managed by <a href="https://github.com/tirth-bhimani">Tirth Bhimani</a></strong><br/>
-  <sub>Built for the future of logistics</sub>
-</p>
