@@ -246,6 +246,29 @@ Open **[http://localhost:3000](http://localhost:3000)** to see the app.
 
 ---
 
+## 🐳 Docker Setup
+
+### 1. Build the Docker Image
+Ensure Docker Desktop is running on your machine, then run:
+
+```bash
+docker build -t coreinventory:latest .
+```
+
+### 2. Run with Docker Compose
+The easiest way to run the application is using Docker Compose:
+
+```bash
+docker-compose up -d
+```
+
+The application will be available at **[http://localhost:3000](http://localhost:3000)**.
+
+### 3. Environment Variables in Docker
+Ensure your `.env` file is present in the root directory before building/running. Docker Compose will automatically pick up the variables.
+
+---
+
 <p align="center">
   <strong>Built with ⚡ for Enterprise Logistics</strong><br/>
   <sub>Powered by the Verdant Glass Design System</sub>
