@@ -17,7 +17,7 @@ export async function PUT(request: NextRequest) {
     }
 
     if (email && email.trim() !== "" && email.trim() !== user.email) {
-      // Check for email collision
+
       const existing = await prisma.user.findUnique({
         where: { email: email.trim().toLowerCase() },
       });
@@ -26,7 +26,6 @@ export async function PUT(request: NextRequest) {
       }
       updateData.email = email.trim().toLowerCase();
     }
-
 
     if (Object.keys(updateData).length === 0) {
       return NextResponse.json({ error: "No valid fields to update" }, { status: 400 });

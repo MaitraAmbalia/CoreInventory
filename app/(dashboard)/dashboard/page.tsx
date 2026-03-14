@@ -100,7 +100,7 @@ export default function DashboardPage() {
 
   return (
     <div className="animate-fade-in">
-      {/* Page Header */}
+      {}
       <div style={{ marginBottom: 28 }}>
         <h1
           style={{
@@ -117,7 +117,7 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      {/* KPI Cards */}
+      {}
       <div
         className="stagger-children"
         style={{
@@ -176,7 +176,7 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      {/* Operation Overview */}
+      {}
       <div
         style={{
           display: "grid",
@@ -185,7 +185,7 @@ export default function DashboardPage() {
           marginBottom: 28,
         }}
       >
-        {/* Receipts Overview */}
+        {}
         <Link
           href="/receipts"
           className="glass-card"
@@ -287,7 +287,7 @@ export default function DashboardPage() {
           </div>
         </Link>
 
-        {/* Deliveries Overview */}
+        {}
         <div className="glass-card" style={{ padding: 24 }}>
           <div
             style={{
@@ -380,7 +380,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Recent Operations */}
+      {}
       <div className="glass-card" style={{ padding: 24 }}>
         <div
           style={{

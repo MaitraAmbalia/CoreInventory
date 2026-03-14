@@ -7,7 +7,6 @@ const JWT_SECRET = process.env.JWT_SECRET || "fallback_secret_change_me";
 const TOKEN_EXPIRY = "7d";
 const COOKIE_NAME = "coreinvent_token";
 
-// ─── Types ───────────────────────────────────────────────
 export interface JWTPayload {
   userId: string;
   email: string;
@@ -22,7 +21,6 @@ export interface AuthUser {
   role: "Manager" | "Staff";
 }
 
-// ─── Password Helpers ────────────────────────────────────
 export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 12);
 }
@@ -34,7 +32,6 @@ export async function verifyPassword(
   return bcrypt.compare(password, hash);
 }
 
-// ─── JWT Helpers ─────────────────────────────────────────
 export function createToken(payload: JWTPayload): string {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: TOKEN_EXPIRY });
 }
@@ -47,14 +44,13 @@ export function verifyToken(token: string): JWTPayload | null {
   }
 }
 
-// ─── Cookie Helpers ──────────────────────────────────────
 export async function setAuthCookie(token: string) {
   const cookieStore = await cookies();
   cookieStore.set(COOKIE_NAME, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 7, // 7 days
+    maxAge: 60 * 60 * 24 * 7,
     path: "/",
   });
 }
@@ -69,7 +65,6 @@ export async function getAuthCookie(): Promise<string | undefined> {
   return cookieStore.get(COOKIE_NAME)?.value;
 }
 
-// ─── Get Current User ────────────────────────────────────
 export async function getCurrentUser(): Promise<AuthUser | null> {
   const token = await getAuthCookie();
   if (!token) return null;
@@ -92,14 +87,12 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
   };
 }
 
-// ─── Require Auth (throws if not authenticated) ─────────
 export async function requireAuth(): Promise<AuthUser> {
   const user = await getCurrentUser();
   if (!user) throw new Error("Unauthorized");
   return user;
 }
 
-// ─── Require Manager Role ────────────────────────────────
 export async function requireManager(): Promise<AuthUser> {
   const user = await requireAuth();
   if (user.role !== "Manager") throw new Error("Forbidden: Manager access required");

@@ -3,7 +3,7 @@ import prisma from "@/lib/db";
 
 export async function POST() {
   try {
-    // Seed default category
+
     await prisma.category.upsert({
       where: { id: "00000000-0000-0000-0000-000000000001" },
       update: {},
@@ -14,7 +14,7 @@ export async function POST() {
       },
     });
 
-    // Seed default warehouse
+
     const warehouse = await prisma.warehouse.upsert({
       where: { shortCode: "WH" },
       update: {},
@@ -25,7 +25,7 @@ export async function POST() {
       },
     });
 
-    // Seed default locations
+
     const locationDefs = [
       { name: "Stock", shortCode: "WH/STOCK", isScrap: false },
       { name: "Input (Vendors)", shortCode: "WH/INPUT", isScrap: false },

@@ -26,7 +26,7 @@ export async function POST(
       );
     }
 
-    // Move to Ready status
+
     const updated = await prisma.operation.update({
       where: { id },
       data: { status: "Ready" },

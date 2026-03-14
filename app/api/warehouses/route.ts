@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { requireAuth } from "@/lib/auth";
 
-// GET /api/warehouses - List warehouses and their locations
 export async function GET(request: NextRequest) {
   try {
     const user = await requireAuth();
@@ -17,8 +16,8 @@ export async function GET(request: NextRequest) {
       orderBy: { createdAt: "asc" },
     });
 
-    // We also want to compute total stock per warehouse. 
-    // This requires aggregating stock levels across all locations in the warehouse.
+
+
     const warehousesWithStock = await Promise.all(
       warehouses.map(async (warehouse) => {
         const locationIds = warehouse.locations.map((l) => l.id);
@@ -43,7 +42,6 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST /api/warehouses - Create a new warehouse
 export async function POST(request: NextRequest) {
   try {
     const user = await requireAuth();
@@ -57,10 +55,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Name and Short Code are required" }, { status: 400 });
     }
 
-    // Ensure shortCode is uppercase
+
     const upperShortCode = shortCode.toUpperCase();
 
-    // Check if short code is unique
+
     const existing = await prisma.warehouse.findUnique({
       where: { shortCode: upperShortCode },
     });
@@ -69,7 +67,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Short Code already exists" }, { status: 400 });
     }
 
-    // Create warehouse and default 'Stock' location in a transaction
+
     const warehouse = await prisma.$transaction(async (tx) => {
       const wh = await tx.warehouse.create({
         data: {

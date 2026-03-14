@@ -20,9 +20,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Generate 6 digit OTP
+
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const expiry = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
+    const expiry = new Date(Date.now() + 15 * 60 * 1000);
 
     await prisma.user.update({
       where: { id: user.id },

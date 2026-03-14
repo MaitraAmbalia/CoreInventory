@@ -33,7 +33,7 @@ export default function ForgotPasswordPage() {
       }
 
       setSuccess(true);
-      // Optional: push to reset password page with email pre-filled in query
+
       setTimeout(() => {
         router.push(`/reset-password?email=${encodeURIComponent(email)}`);
       }, 2000);

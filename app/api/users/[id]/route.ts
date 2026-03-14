@@ -15,7 +15,7 @@ export async function PUT(
       return NextResponse.json({ error: "Invalid role" }, { status: 400 });
     }
 
-    // Attempting to promote to Manager
+
     if (role === "Manager") {
       const targetUser = await prisma.user.findUnique({ where: { id } });
       if (targetUser?.email !== "24bce037@nirmauni.ac.in") {
@@ -23,7 +23,7 @@ export async function PUT(
       }
     }
 
-    // Prevent changing own role
+
     if (id === manager.id) {
       return NextResponse.json({ error: "Cannot change your own role" }, { status: 400 });
     }
@@ -52,7 +52,7 @@ export async function DELETE(
     const manager = await requireManager();
     const { id } = await params;
 
-    // Prevent deleting oneself
+
     if (id === manager.id) {
       return NextResponse.json({ error: "Cannot delete your own account" }, { status: 400 });
     }

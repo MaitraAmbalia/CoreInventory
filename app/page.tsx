@@ -18,7 +18,7 @@ import {
 export default function LandingPage() {
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg-primary)" }}>
-      {/* ── Navigation ── */}
+      {}
       <nav
         style={{
           position: "fixed",
@@ -102,7 +102,7 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* ── Hero Section ── */}
+      {}
       <section
         style={{
           paddingTop: 140,
@@ -112,7 +112,7 @@ export default function LandingPage() {
           overflow: "hidden",
         }}
       >
-        {/* Background decoration */}
+        {}
         <div
           style={{
             position: "absolute",
@@ -150,7 +150,7 @@ export default function LandingPage() {
             position: "relative",
           }}
         >
-          {/* Badge */}
+          {}
           <div
             style={{
               display: "inline-flex",
@@ -242,7 +242,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Trusted By / Stats Bar ── */}
+      {}
       <section
         style={{
           maxWidth: 900,
@@ -299,7 +299,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Features Section ── */}
+      {}
       <section
         style={{
           maxWidth: 1100,
@@ -433,7 +433,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── How It Works ── */}
+      {}
       <section
         style={{
           background: "var(--bg-secondary)",
@@ -535,7 +535,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── CTA Section ── */}
+      {}
       <section
         style={{
           padding: "80px 24px",
@@ -639,7 +639,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Footer ── */}
+      {}
       <footer
         style={{
           borderTop: "1px solid var(--border-primary)",

@@ -48,7 +48,7 @@ export default function ReceiptsPage() {
 
   return (
     <div className="animate-fade-in">
-      {/* Header & Controls */}
+      {}
       <div
         style={{
           display: "flex",
@@ -71,7 +71,7 @@ export default function ReceiptsPage() {
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          {/* Search */}
+          {}
           <div
             className="search-input-wrapper"
             style={{
@@ -104,7 +104,7 @@ export default function ReceiptsPage() {
             />
           </div>
 
-          {/* View Toggles */}
+          {}
           <div
             style={{
               display: "flex",
@@ -168,7 +168,7 @@ export default function ReceiptsPage() {
           </p>
         </div>
       ) : viewMode === "list" ? (
-        /* List View */
+
         <div
           className="table-container"
           style={{
@@ -258,7 +258,7 @@ export default function ReceiptsPage() {
           </table>
         </div>
       ) : (
-        /* Kanban View placeholder */
+
         <div
           style={{
             display: "flex",

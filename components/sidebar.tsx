@@ -22,6 +22,7 @@ import {
   Users,
   Settings,
   Building2,
+  BarChart3,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -76,9 +77,16 @@ export default function Sidebar({ user }: SidebarProps) {
   const [profileOpen, setProfileOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Dynamic nav items based on user role
+
   const navItems = [...baseNavItems];
   if (user) {
+    if (user.role === "Manager") {
+      navItems.push({
+        label: "Analytics",
+        href: "/analytics",
+        icon: BarChart3,
+      });
+    }
     const settingsChildren = [
       { label: "Warehouse", href: "/settings/warehouses", icon: Building2 },
     ];
@@ -88,7 +96,6 @@ export default function Sidebar({ user }: SidebarProps) {
     navItems.push({
       label: "Settings",
       icon: Settings,
-      // @ts-ignore
       children: settingsChildren,
     });
   }
@@ -106,7 +113,7 @@ export default function Sidebar({ user }: SidebarProps) {
 
   return (
     <>
-      {/* Mobile toggle */}
+      {}
       <button
         onClick={() => setMobileOpen(!mobileOpen)}
         className="md:hidden"
@@ -126,7 +133,7 @@ export default function Sidebar({ user }: SidebarProps) {
         {mobileOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
 
-      {/* Overlay on mobile */}
+      {}
       {mobileOpen && (
         <div
           onClick={() => setMobileOpen(false)}
@@ -139,12 +146,12 @@ export default function Sidebar({ user }: SidebarProps) {
         />
       )}
 
-      {/* Sidebar */}
+      {}
       <aside
         className={`sidebar ${mobileOpen ? "open" : ""}`}
         style={mobileOpen ? { transform: "translateX(0)" } : undefined}
       >
-        {/* Logo */}
+        {}
         <div
           style={{
             padding: "20px 20px 16px",
@@ -195,7 +202,7 @@ export default function Sidebar({ user }: SidebarProps) {
           </div>
         </div>
 
-        {/* Navigation */}
+        {}
         <nav style={{ flex: 1, padding: "12px 0", overflowY: "auto" }}>
           <div
             style={{
@@ -285,7 +292,7 @@ export default function Sidebar({ user }: SidebarProps) {
           })}
         </nav>
 
-        {/* User Profile */}
+        {}
         {user && (
           <div
             style={{
@@ -360,7 +367,7 @@ export default function Sidebar({ user }: SidebarProps) {
               />
             </button>
 
-            {/* Profile dropdown */}
+            {}
             {profileOpen && (
               <div
                 style={{

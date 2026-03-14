@@ -35,27 +35,27 @@ export default function MoveHistoryPage() {
     return () => clearTimeout(timer);
   }, [search]);
 
-  // Determine if it's an incoming or outgoing move based on location type
+
   const getMoveDirection = (move: MoveRecord) => {
     const fromCode = move.from_location_code || "";
     const toCode = move.to_location_code || "";
 
-    // Incoming: from vendor/input to internal
+
     if (fromCode.includes("INPUT") || fromCode.includes("VENDOR")) return "in";
-    // Outgoing: from internal to customer/output/scrap
+
     if (
       toCode.includes("OUTPUT") ||
       toCode.includes("CUSTOMER") ||
       toCode.includes("SCRAP")
     )
       return "out";
-    // Internal transfers
+
     return "internal";
   };
 
   return (
     <div className="animate-fade-in">
-      {/* Header */}
+      {}
       <div style={{ marginBottom: 24 }}>
         <h1
           style={{
@@ -72,7 +72,7 @@ export default function MoveHistoryPage() {
         </p>
       </div>
 
-      {/* Search */}
+      {}
       <div className="glass-card" style={{ padding: 16, marginBottom: 20 }}>
         <div style={{ position: "relative", maxWidth: 400 }}>
           <Search
@@ -95,7 +95,7 @@ export default function MoveHistoryPage() {
         </div>
       </div>
 
-      {/* Ledger Table */}
+      {}
       <div className="glass-card" style={{ overflow: "hidden" }}>
         {loading ? (
           <div className="empty-state">

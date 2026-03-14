@@ -17,13 +17,13 @@ export async function POST(request: NextRequest) {
     });
 
     if (!user) {
-      // Don't reveal if user exists for security
+
       return NextResponse.json({ success: true, message: "If an account with that email exists, an OTP has been sent." });
     }
 
-    // Generate 6 digit OTP
+
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const expiry = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
+    const expiry = new Date(Date.now() + 15 * 60 * 1000);
 
     await prisma.user.update({
       where: { id: user.id },

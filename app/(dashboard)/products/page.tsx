@@ -68,7 +68,7 @@ export default function ProductsPage() {
 
   return (
     <div className="animate-fade-in">
-      {/* Header */}
+      {}
       <div
         style={{
           display: "flex",
@@ -111,7 +111,7 @@ export default function ProductsPage() {
         )}
       </div>
 
-      {/* Filters */}
+      {}
       <div
         className="glass-card"
         style={{
@@ -169,7 +169,7 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      {/* Table */}
+      {}
       <div className="glass-card" style={{ overflow: "hidden" }}>
         {loading ? (
           <div className="empty-state">

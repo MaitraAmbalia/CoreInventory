@@ -76,7 +76,7 @@ export default function UsersPage() {
 
   return (
     <div className="p-4 sm:p-8 max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4">
-      {/* Header */}
+      {}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-white tracking-tight flex items-center gap-3">
@@ -87,7 +87,7 @@ export default function UsersPage() {
         </div>
       </div>
 
-      {/* Toolbar */}
+      {}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center shadow-sm">
         <div className="relative w-full max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" />
@@ -101,7 +101,7 @@ export default function UsersPage() {
         </div>
       </div>
 
-      {/* Table */}
+      {}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">

@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "OTP has expired. Please request a new one." }, { status: 400 });
     }
 
-    // OTP is valid. Clear it and issue a short-lived reset token (15 mins)
+
     await prisma.user.update({
       where: { id: user.id },
       data: {

@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
-/* ─── Design System Tokens ─────────────────────────────── */
+
 :root {
-  /* Light Theme: Beige / White / #c7eabb */
+  
   --bg-primary: #fdfcf7;
   --bg-secondary: #f7f5ee;
   --bg-card: #ffffff;
@@ -39,7 +39,7 @@
   --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.02);
 }
 
-/* Dark Theme */
+
 .dark {
   --bg-primary: #0f1510;
   --bg-secondary: #161d17;
@@ -77,7 +77,7 @@
   --font-mono: var(--font-geist-mono), "JetBrains Mono", monospace;
 }
 
-/* ─── Global Resets ────────────────────────────────────── */
+
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--border-primary) transparent;
@@ -115,7 +115,7 @@ body {
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* ─── Glass Card ───────────────────────────────────────── */
+
 .glass-card {
   background: var(--bg-card);
   border: 1px solid var(--border-primary);
@@ -129,7 +129,7 @@ body {
   box-shadow: var(--shadow-md);
 }
 
-/* ─── Buttons ──────────────────────────────────────────── */
+
 .btn-primary {
   background: var(--accent-gradient);
   color: white;
@@ -202,7 +202,7 @@ body {
   opacity: 1;
 }
 
-/* ─── Inputs ───────────────────────────────────────────── */
+
 .input-field {
   background: var(--bg-input);
   color: var(--text-primary);
@@ -259,7 +259,7 @@ body {
   box-shadow: 0 0 0 3px rgba(74, 140, 63, 0.12);
 }
 
-/* ─── Form Label ───────────────────────────────────────── */
+
 .form-label {
   display: block;
   font-size: 13px;
@@ -269,7 +269,7 @@ body {
   letter-spacing: 0.02em;
 }
 
-/* ─── Data Table ───────────────────────────────────────── */
+
 .data-table {
   width: 100%;
   border-collapse: separate;
@@ -323,7 +323,7 @@ body {
   border-bottom-color: rgba(74, 140, 63, 0.15);
 }
 
-/* ─── Status Badge ─────────────────────────────────────── */
+
 .status-badge {
   display: inline-flex;
   align-items: center;
@@ -336,7 +336,7 @@ body {
   border: 1px solid;
 }
 
-/* ─── KPI Card ─────────────────────────────────────────── */
+
 .kpi-card {
   background: var(--bg-card);
   border: 1px solid var(--border-primary);
@@ -370,7 +370,7 @@ body {
   opacity: 1;
 }
 
-/* ─── Sidebar ──────────────────────────────────────────── */
+
 .sidebar {
   width: var(--sidebar-width);
   background: var(--bg-sidebar);
@@ -432,14 +432,14 @@ body {
   border-radius: 0 4px 4px 0;
 }
 
-/* ─── Page Container ───────────────────────────────────── */
+
 .page-container {
   margin-left: var(--sidebar-width);
   min-height: 100vh;
   padding: 24px 32px;
 }
 
-/* ─── Auth Layout ──────────────────────────────────────── */
+
 .auth-container {
   min-height: 100vh;
   display: flex;
@@ -463,7 +463,7 @@ body {
   box-shadow: var(--shadow-lg);
 }
 
-/* ─── Animations ───────────────────────────────────────── */
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
@@ -501,7 +501,7 @@ body {
   animation: float 3s ease-in-out infinite;
 }
 
-/* stagger children */
+
 .stagger-children > * {
   opacity: 0;
   animation: fadeIn 0.4s ease-out forwards;
@@ -514,7 +514,7 @@ body {
 .stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
 .stagger-children > *:nth-child(6) { animation-delay: 0.3s; }
 
-/* ─── Utility ──────────────────────────────────────────── */
+
 .text-gradient {
   background: var(--accent-gradient);
   -webkit-background-clip: text;
@@ -539,7 +539,7 @@ body {
   opacity: 0.4;
 }
 
-/* ─── Responsive ───────────────────────────────────────── */
+
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);

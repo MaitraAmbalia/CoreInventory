@@ -17,12 +17,12 @@ export default function ProfilePage() {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Edit Profile State
+
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState("");
   const [saveLoading, setSaveLoading] = useState(false);
 
-  // Change Password State
+
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
@@ -90,18 +90,18 @@ export default function ProfilePage() {
     setPwdError("");
     try {
       if (newPassword.length < 6) throw new Error("Password must be at least 6 characters.");
-      
+
       const res = await fetch("/api/profile/change-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ otp, newPassword }),
       });
       const data = await res.json();
-      
+
       if (!res.ok) {
         throw new Error(data.error || "Failed to change password.");
       }
-      
+
       setPwdSuccess("Password changed successfully! Next time you log in, use the new password.");
       setOtp("");
       setNewPassword("");
@@ -129,7 +129,7 @@ export default function ProfilePage() {
 
   return (
     <div className="animate-fade-in" style={{ maxWidth: 500 }}>
-      {/* Header */}
+      {}
       <div style={{ marginBottom: 24 }}>
         <Link
           href="/"
@@ -158,7 +158,7 @@ export default function ProfilePage() {
       </div>
 
       <div className="glass-card" style={{ padding: 32, textAlign: "center" }}>
-        {/* Avatar */}
+        {}
         <div
           style={{
             width: 80,
@@ -180,7 +180,7 @@ export default function ProfilePage() {
 
         {isEditing ? (
           <div style={{ marginBottom: 24, display: "flex", gap: 8, justifyContent: "center", alignItems: "center" }}>
-            <input 
+            <input
               className="input-field"
               value={editName}
               onChange={e => setEditName(e.target.value)}
@@ -207,7 +207,7 @@ export default function ProfilePage() {
               }}
             >
               {user.name}
-              <button 
+              <button
                 onClick={() => setIsEditing(true)}
                 style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", padding: 4 }}
               >
@@ -220,7 +220,7 @@ export default function ProfilePage() {
           </>
         )}
 
-        {/* Profile Info Fields */}
+        {}
         <div style={{ textAlign: "left" }}>
           <div
             style={{

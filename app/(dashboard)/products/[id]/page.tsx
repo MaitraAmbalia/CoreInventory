@@ -124,7 +124,7 @@ export default function ProductDetailPage() {
 
   return (
     <div className="animate-fade-in" style={{ maxWidth: 700 }}>
-      {/* Header */}
+      {}
       <div style={{ marginBottom: 24 }}>
         <Link
           href="/products"
@@ -171,7 +171,7 @@ export default function ProductDetailPage() {
         </div>
       </div>
 
-      {/* Tabs */}
+      {}
       <div
         style={{
           display: "flex",
@@ -215,7 +215,7 @@ export default function ProductDetailPage() {
         ))}
       </div>
 
-      {/* Error */}
+      {}
       {error && (
         <div
           style={{
@@ -232,7 +232,7 @@ export default function ProductDetailPage() {
         </div>
       )}
 
-      {/* Details Tab */}
+      {}
       {activeTab === "details" && (
         <form onSubmit={handleSave}>
           <div className="glass-card" style={{ padding: 24 }}>
@@ -366,7 +366,7 @@ export default function ProductDetailPage() {
         </form>
       )}
 
-      {/* Stock per Location Tab */}
+      {}
       {activeTab === "stock" && (
         <div className="glass-card" style={{ overflow: "hidden" }}>
           {stockLevels.length === 0 ? (

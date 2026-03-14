@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify OTP
+
     const user = await prisma.user.findUnique({
       where: { id: sessionUrl.id },
     });
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Hash the new password and update user, clear OTP
+
     const passwordHash = await hashPassword(newPassword);
 
     await prisma.user.update({

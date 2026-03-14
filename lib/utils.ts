@@ -1,11 +1,9 @@
 import { type ClassValue, clsx } from "clsx";
 
-// Simple classnames merge
 export function cn(...inputs: ClassValue[]) {
   return clsx(inputs);
 }
 
-// Format date for display
 export function formatDate(date: Date | string | null): string {
   if (!date) return "—";
   const d = new Date(date);
@@ -16,7 +14,6 @@ export function formatDate(date: Date | string | null): string {
   });
 }
 
-// Format date with time
 export function formatDateTime(date: Date | string | null): string {
   if (!date) return "—";
   const d = new Date(date);
@@ -29,7 +26,6 @@ export function formatDateTime(date: Date | string | null): string {
   });
 }
 
-// Generate operation reference number
 export function generateRefNo(
   warehouseCode: string,
   type: string,
@@ -45,7 +41,6 @@ export function generateRefNo(
   return `${warehouseCode}/${typeCode}/${String(sequence).padStart(5, "0")}`;
 }
 
-// Status color map
 export function getStatusColor(status: string): string {
   const map: Record<string, string> = {
     Draft: "bg-slate-500/20 text-slate-300 border-slate-500/30",
@@ -56,7 +51,6 @@ export function getStatusColor(status: string): string {
   return map[status] || "bg-slate-500/20 text-slate-300";
 }
 
-// Operation type color map
 export function getTypeColor(type: string): string {
   const map: Record<string, string> = {
     Receipt: "bg-green-500/20 text-green-300 border-green-500/30",

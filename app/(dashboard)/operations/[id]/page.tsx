@@ -97,7 +97,7 @@ export default function OperationDetailPage() {
   const handlePrint = async () => {
     if (!printRef.current) return;
 
-    // Temporarily set a white background and proper sizing for the canvas shot
+
     const originalBackground = printRef.current.style.background;
     const originalBorder = printRef.current.style.border;
     printRef.current.style.background = "white";
@@ -112,7 +112,7 @@ export default function OperationDetailPage() {
 
       const imgData = canvas.toDataURL("image/png");
 
-      // Calculate A4 dimensions
+
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
@@ -127,7 +127,7 @@ export default function OperationDetailPage() {
     } catch (e) {
       console.error("Print generation failed", e);
     } finally {
-      // Revert styles safely
+
       if (printRef.current) {
         printRef.current.style.background = originalBackground;
         printRef.current.style.color = "";
@@ -154,7 +154,7 @@ export default function OperationDetailPage() {
 
   return (
     <div className="animate-fade-in" style={{ maxWidth: 800 }}>
-      {/* Header */}
+      {}
       <div style={{ marginBottom: 24 }}>
         <Link
           href="/operations"
@@ -253,7 +253,7 @@ export default function OperationDetailPage() {
         </div>
       )}
 
-      {/* Info Cards */}
+      {}
       <div
         style={{
           display: "grid",
@@ -313,7 +313,7 @@ export default function OperationDetailPage() {
         ))}
       </div>
 
-      {/* Line Items */}
+      {}
       <div className="glass-card" style={{ overflow: "hidden" }}>
         <div
           style={{

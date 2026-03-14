@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { requireAuth } from "@/lib/auth";
 
-// PUT /api/warehouses/[id] - Update warehouse
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -31,7 +30,6 @@ export async function PUT(
   }
 }
 
-// DELETE /api/warehouses/[id] - Delete warehouse
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -44,7 +42,7 @@ export async function DELETE(
 
     const { id } = await params;
 
-    // Check if warehouse has stock
+
     const warehouse = await prisma.warehouse.findUnique({
       where: { id },
       include: { locations: true }

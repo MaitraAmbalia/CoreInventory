@@ -2,9 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Building2, Plus, Edit2, Trash2, MapPin, Loader2, Search } from "lucide-react";
-import { useRouter } from "next/navigation";
 
-// @ts-ignore
 type Location = {
   id: string;
   name: string;
@@ -21,14 +19,12 @@ type Warehouse = {
 };
 
 export default function WarehouseSettingsPage() {
-  const router = useRouter();
   const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [userRole, setUserRole] = useState<string>("Staff");
 
-  // Modal State
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState<"Create" | "Edit">("Create");
   const [submitting, setSubmitting] = useState(false);
@@ -40,8 +36,8 @@ export default function WarehouseSettingsPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
       setWarehouses(data.warehouses || []);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -78,13 +74,13 @@ export default function WarehouseSettingsPage() {
     try {
       const url = modalMode === "Create" ? "/api/warehouses" : `/api/warehouses/${formData.id}`;
       const method = modalMode === "Create" ? "POST" : "PUT";
-      
+
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: formData.name,
-          shortCode: modalMode === "Create" ? formData.shortCode : undefined, // Can't change shortcode easily
+          shortCode: modalMode === "Create" ? formData.shortCode : undefined,
           address: formData.address,
         }),
       });
@@ -93,11 +89,11 @@ export default function WarehouseSettingsPage() {
         const data = await res.json();
         throw new Error(data.error);
       }
-      
+
       setShowModal(false);
       fetchWarehouses();
-    } catch (err: any) {
-      alert(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) alert(err.message);
     } finally {
       setSubmitting(false);
     }
@@ -112,203 +108,218 @@ export default function WarehouseSettingsPage() {
         throw new Error(data.error);
       }
       fetchWarehouses();
-    } catch (err: any) {
-      alert(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) alert(err.message);
     }
   };
 
-  const filteredWarehouses = warehouses.filter((w) =>
-    w.name.toLowerCase().includes(search.toLowerCase()) ||
-    w.shortCode.toLowerCase().includes(search.toLowerCase())
+  const filteredWarehouses = warehouses.filter(
+    (w) =>
+      w.name.toLowerCase().includes(search.toLowerCase()) ||
+      w.shortCode.toLowerCase().includes(search.toLowerCase())
   );
 
-  if (loading) return <div className="p-8 text-slate-400 font-mono">Loading warehouses...</div>;
+  if (loading) {
+    return (
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: 80, color: "var(--text-muted)" }}>
+        <Loader2 size={20} className="animate-spin" style={{ marginRight: 10 }} />
+        Loading warehouses...
+      </div>
+    );
+  }
 
   return (
-    <div className="p-4 sm:p-8 max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div className="animate-fade-in">
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24, flexWrap: "wrap", gap: 12 }}>
         <div>
-          <h1 className="text-3xl font-bold text-white tracking-tight flex items-center gap-3">
-            <Building2 className="h-8 w-8 text-indigo-500" />
-            Warehouse Management
-          </h1>
-          <p className="text-slate-400 mt-1">Manage physical storage locations and facilities.</p>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+            <Building2 size={28} color="var(--accent-primary)" />
+            <h1 style={{ fontSize: 26, fontWeight: 700, letterSpacing: "-0.02em" }}>Warehouse Management</h1>
+          </div>
+          <p style={{ color: "var(--text-muted)", fontSize: 14 }}>Manage physical storage locations and facilities</p>
         </div>
         {userRole === "Manager" && (
-          <button
-            onClick={() => openModal("Create")}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl flex items-center gap-2 transition-colors font-medium shadow-lg shadow-indigo-600/20"
-          >
-            <Plus size={18} />
+          <button onClick={() => openModal("Create")} className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <Plus size={16} />
             Add Warehouse
           </button>
         )}
       </div>
 
-      {error && <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl">{error}</div>}
+      {error && (
+        <div style={{ background: "var(--danger-bg)", border: "1px solid rgba(239, 68, 68, 0.3)", borderRadius: "var(--radius-md)", padding: "10px 14px", fontSize: 13, color: "var(--danger)", marginBottom: 20 }}>
+          {error}
+        </div>
+      )}
 
-      {/* Toolbar */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center shadow-sm">
-        <div className="relative w-full max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" />
+      <div className="glass-card" style={{ padding: 16, marginBottom: 20 }}>
+        <div style={{ position: "relative", maxWidth: 400 }}>
+          <Search size={16} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }} />
           <input
-            type="text"
+            className="input-field"
             placeholder="Search warehouses..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2 pl-10 pr-4 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-mono"
+            style={{ paddingLeft: 36 }}
           />
         </div>
       </div>
 
-      {/* Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-slate-950/50 border-b border-slate-800">
-                <th className="p-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Warehouse Name</th>
-                <th className="p-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Short Code</th>
-                <th className="p-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Address</th>
-                <th className="p-4 text-xs font-semibold text-slate-400 uppercase tracking-wider text-right">Total Stock</th>
-                {userRole === "Manager" && (
-                  <th className="p-4 text-xs font-semibold text-slate-400 uppercase tracking-wider text-right">Actions</th>
-                )}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800/50">
-              {filteredWarehouses.length === 0 ? (
+      <div className="glass-card" style={{ overflow: "hidden" }}>
+        {filteredWarehouses.length === 0 ? (
+          <div className="empty-state">
+            <Building2 size={48} />
+            <p style={{ fontSize: 16, fontWeight: 500, marginTop: 8 }}>No warehouses found</p>
+            <p style={{ fontSize: 13, marginTop: 4 }}>
+              {search ? "Try adjusting your search" : "Create your first warehouse to get started"}
+            </p>
+          </div>
+        ) : (
+          <div style={{ overflowX: "auto" }}>
+            <table className="data-table">
+              <thead>
                 <tr>
-                  <td colSpan={userRole === "Manager" ? 5 : 4} className="p-8 text-center text-slate-500">
-                    No warehouses found.
-                  </td>
+                  <th>Warehouse</th>
+                  <th>Short Code</th>
+                  <th>Address</th>
+                  <th>Total Stock</th>
+                  {userRole === "Manager" && <th>Actions</th>}
                 </tr>
-              ) : (
-                filteredWarehouses.map((wh) => (
-                  <tr key={wh.id} className="hover:bg-slate-800/20 transition-colors group">
-                    <td className="p-4">
-                      <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
-                          <Building2 size={18} />
+              </thead>
+              <tbody>
+                {filteredWarehouses.map((wh) => (
+                  <tr key={wh.id} style={{ cursor: "default" }}>
+                    <td>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <div style={{ width: 36, height: 36, borderRadius: "var(--radius-md)", background: "rgba(99, 102, 241, 0.1)", border: "1px solid rgba(99, 102, 241, 0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <Building2 size={16} color="var(--accent-primary)" />
                         </div>
-                        <span className="font-medium text-white">{wh.name}</span>
+                        <span style={{ fontWeight: 500 }}>{wh.name}</span>
                       </div>
                     </td>
-                    <td className="p-4">
-                      <span className="font-mono text-sm px-2 py-1 bg-slate-800 text-slate-300 rounded border border-slate-700">
+                    <td>
+                      <span style={{ fontFamily: "var(--font-mono)", fontSize: 13, padding: "3px 8px", background: "var(--bg-elevated)", borderRadius: 4, border: "1px solid var(--border-primary)" }}>
                         {wh.shortCode}
                       </span>
                     </td>
-                    <td className="p-4">
+                    <td>
                       {wh.address ? (
-                        <div className="flex items-center gap-1.5 text-sm text-slate-400">
-                          <MapPin size={14} />
+                        <div style={{ display: "flex", alignItems: "center", gap: 6, color: "var(--text-muted)", fontSize: 13 }}>
+                          <MapPin size={13} />
                           {wh.address}
                         </div>
                       ) : (
-                        <span className="text-slate-500 text-sm">—</span>
+                        <span style={{ color: "var(--text-muted)" }}>—</span>
                       )}
                     </td>
-                    <td className="p-4 text-right">
-                      <span className="font-semibold text-indigo-400">
-                        {parseFloat(wh.totalStock.toString()).toFixed(0)} <span className="text-xs font-normal text-slate-500">units</span>
+                    <td>
+                      <span style={{ fontWeight: 600, color: "var(--accent-primary)", fontFamily: "var(--font-mono)" }}>
+                        {parseFloat(wh.totalStock.toString()).toFixed(0)}
                       </span>
+                      <span style={{ fontSize: 11, color: "var(--text-muted)", marginLeft: 4 }}>units</span>
                     </td>
                     {userRole === "Manager" && (
-                      <td className="p-4 text-right">
-                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <td>
+                        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                           <button
                             onClick={() => openModal("Edit", wh)}
-                            className="p-1.5 text-slate-400 hover:text-indigo-400 hover:bg-indigo-400/10 rounded-md transition-colors"
+                            style={{ padding: 6, background: "none", border: "none", cursor: "pointer", borderRadius: "var(--radius-sm)", color: "var(--text-muted)", transition: "all 0.2s" }}
+                            onMouseEnter={(e) => { e.currentTarget.style.color = "var(--accent-primary)"; e.currentTarget.style.background = "rgba(99,102,241,0.1)"; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-muted)"; e.currentTarget.style.background = "none"; }}
                           >
-                            <Edit2 className="h-4 w-4" />
+                            <Edit2 size={15} />
                           </button>
                           <button
                             onClick={() => handleDelete(wh.id)}
-                            className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-md transition-colors"
+                            style={{ padding: 6, background: "none", border: "none", cursor: "pointer", borderRadius: "var(--radius-sm)", color: "var(--text-muted)", transition: "all 0.2s" }}
+                            onMouseEnter={(e) => { e.currentTarget.style.color = "var(--danger)"; e.currentTarget.style.background = "rgba(239,68,68,0.1)"; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-muted)"; e.currentTarget.style.background = "none"; }}
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 size={15} />
                           </button>
                         </div>
                       </td>
                     )}
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
-      {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in">
-          <div className="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
-            <div className="p-6 border-b border-slate-800/80">
-              <h2 className="text-xl font-bold text-white">{modalMode} Warehouse</h2>
-              <p className="text-sm text-slate-400 mt-1">
+        <div
+          style={{ position: "fixed", inset: 0, zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)", padding: 16 }}
+          onClick={() => setShowModal(false)}
+        >
+          <div
+            className="glass-card animate-fade-in"
+            style={{ width: "100%", maxWidth: 480, padding: 0, overflow: "hidden" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ padding: "20px 24px", borderBottom: "1px solid var(--border-primary)" }}>
+              <h2 style={{ fontSize: 18, fontWeight: 700 }}>{modalMode} Warehouse</h2>
+              <p style={{ fontSize: 13, color: "var(--text-muted)", marginTop: 4 }}>
                 {modalMode === "Create" ? "Add a new facility to your network." : "Update facility details."}
               </p>
             </div>
-            
-            <form onSubmit={handleSave} className="p-6 space-y-5">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-300">Warehouse Name</label>
-                <input
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="e.g. Central Distribution Hub"
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 px-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                />
+
+            <form onSubmit={handleSave} style={{ padding: 24 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                <div>
+                  <label className="form-label">Warehouse Name *</label>
+                  <input
+                    className="input-field"
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="e.g. Central Distribution Hub"
+                  />
+                </div>
+
+                <div>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+                    <label className="form-label" style={{ marginBottom: 0 }}>Short Code *</label>
+                    {modalMode === "Edit" && (
+                      <span style={{ fontSize: 11, color: "var(--text-muted)", background: "var(--bg-elevated)", padding: "2px 8px", borderRadius: 4 }}>Locked</span>
+                    )}
+                  </div>
+                  <input
+                    className="input-field"
+                    type="text"
+                    required
+                    disabled={modalMode === "Edit"}
+                    value={formData.shortCode}
+                    onChange={(e) => setFormData({ ...formData, shortCode: e.target.value.toUpperCase() })}
+                    placeholder="e.g. WH1"
+                    style={{ fontFamily: "var(--font-mono)", textTransform: "uppercase", opacity: modalMode === "Edit" ? 0.5 : 1 }}
+                  />
+                  {modalMode === "Create" && (
+                    <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4 }}>A unique 3-5 letter identifier. Cannot be changed later.</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="form-label">Full Address (Optional)</label>
+                  <input
+                    className="input-field"
+                    type="text"
+                    value={formData.address}
+                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    placeholder="Street, City, Country"
+                  />
+                </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-300 flex items-center justify-between">
-                  <span>Short Code</span>
-                  {modalMode === "Edit" && <span className="text-xs text-slate-500 bg-slate-800 px-2 py-0.5 rounded">Locked</span>}
-                </label>
-                <input
-                  type="text"
-                  required
-                  disabled={modalMode === "Edit"}
-                  value={formData.shortCode}
-                  onChange={(e) => setFormData({ ...formData, shortCode: e.target.value.toUpperCase() })}
-                  placeholder="e.g. WH1"
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 px-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed font-mono uppercase"
-                />
-                {modalMode === "Create" && (
-                  <p className="text-xs text-slate-500 mt-1">A unique 3-5 letter identifier. Cannot be changed later.</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-300">Full Address (Optional)</label>
-                <input
-                  type="text"
-                  value={formData.address}
-                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                  placeholder="Street, City, Country"
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 px-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                />
-              </div>
-
-              <div className="pt-4 flex items-center justify-end gap-3 border-t border-slate-800/80 mt-6 -mx-6 px-6 pt-6">
-                <button
-                  type="button"
-                  onClick={() => setShowModal(false)}
-                  className="px-4 py-2 font-medium text-slate-300 hover:text-white transition-colors"
-                >
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 12, marginTop: 24, paddingTop: 20, borderTop: "1px solid var(--border-primary)" }}>
+                <button type="button" onClick={() => setShowModal(false)} className="btn-secondary">
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-xl transition-all disabled:opacity-50 flex items-center gap-2 font-medium shadow-lg shadow-indigo-600/20"
-                >
-                  {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save Warehouse"}
+                <button type="submit" disabled={submitting} className="btn-primary" style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  {submitting ? <Loader2 size={16} className="animate-spin" /> : null}
+                  {submitting ? "Saving..." : "Save Warehouse"}
                 </button>
               </div>
             </form>

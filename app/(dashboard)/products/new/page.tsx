@@ -59,7 +59,7 @@ export default function NewProductPage() {
 
   return (
     <div className="animate-fade-in" style={{ maxWidth: 640 }}>
-      {/* Header */}
+      {}
       <div style={{ marginBottom: 24 }}>
         <Link
           href="/products"
@@ -87,7 +87,7 @@ export default function NewProductPage() {
         </h1>
       </div>
 
-      {/* Error */}
+      {}
       {error && (
         <div
           style={{
@@ -104,7 +104,7 @@ export default function NewProductPage() {
         </div>
       )}
 
-      {/* Form */}
+      {}
       <form onSubmit={handleSubmit}>
         <div className="glass-card" style={{ padding: 24 }}>
           <div
@@ -206,7 +206,7 @@ export default function NewProductPage() {
           </div>
         </div>
 
-        {/* Actions */}
+        {}
         <div
           style={{
             display: "flex",

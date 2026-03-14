@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,7 +6,7 @@ datasource db {
   provider = "postgresql"
 }
 
-// ─── Enums ───────────────────────────────────────────────
+// Enums
 
 enum UserRole {
   Manager
@@ -30,23 +27,23 @@ enum OperationStatus {
   Done
 }
 
-// ─── 1. Users ────────────────────────────────────────────
+// Users
 
 model User {
-  id           String      @id @default(uuid())
-  name         String
-  email        String      @unique
-  passwordHash String      @map("password_hash")
+  id             String      @id @default(uuid())
+  name           String
+  email          String      @unique
+  passwordHash   String      @map("password_hash")
   role           UserRole    @default(Staff)
   resetOtp       String?     @map("reset_otp")
   resetOtpExpiry DateTime?   @map("reset_otp_expiry")
   createdAt      DateTime    @default(now()) @map("created_at")
-  operations   Operation[]
+  operations     Operation[]
 
   @@map("users")
 }
 
-// ─── 2. Warehouses ───────────────────────────────────────
+// Warehouses
 
 model Warehouse {
   id        String     @id @default(uuid())
@@ -59,25 +56,25 @@ model Warehouse {
   @@map("warehouses")
 }
 
-// ─── 3. Locations ────────────────────────────────────────
+// Locations
 
 model Location {
-  id                   String             @id @default(uuid())
-  warehouse            Warehouse?         @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
-  warehouseId          String?            @map("warehouse_id")
-  name                 String
-  shortCode            String             @map("short_code")
-  isScrap              Boolean            @default(false) @map("is_scrap")
-  stockLevels          StockLevel[]
-  srcOperations        Operation[]        @relation("SrcLocation")
-  destOperations       Operation[]        @relation("DestLocation")
-  fromMoveHistory      StockMoveHistory[] @relation("FromLocation")
-  toMoveHistory        StockMoveHistory[] @relation("ToLocation")
+  id              String             @id @default(uuid())
+  warehouse       Warehouse?         @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+  warehouseId     String?            @map("warehouse_id")
+  name            String
+  shortCode       String             @map("short_code")
+  isScrap         Boolean            @default(false) @map("is_scrap")
+  stockLevels     StockLevel[]
+  srcOperations   Operation[]        @relation("SrcLocation")
+  destOperations  Operation[]        @relation("DestLocation")
+  fromMoveHistory StockMoveHistory[] @relation("FromLocation")
+  toMoveHistory   StockMoveHistory[] @relation("ToLocation")
 
   @@map("locations")
 }
 
-// ─── 4. Categories ───────────────────────────────────────
+// Categories
 
 model Category {
   id          String    @id @default(uuid())
@@ -88,7 +85,7 @@ model Category {
   @@map("categories")
 }
 
-// ─── 5. Products ─────────────────────────────────────────
+// Products
 
 model Product {
   id                String             @id @default(uuid())
@@ -106,7 +103,7 @@ model Product {
   @@map("products")
 }
 
-// ─── 6. Stock Levels ─────────────────────────────────────
+// Stock Levels
 
 model StockLevel {
   id           String   @id @default(uuid())
@@ -120,7 +117,7 @@ model StockLevel {
   @@map("stock_levels")
 }
 
-// ─── 7. Operations ───────────────────────────────────────
+// Operations
 
 model Operation {
   id                String          @id @default(uuid())
@@ -142,7 +139,7 @@ model Operation {
   @@map("operations")
 }
 
-// ─── 8. Operation Items ──────────────────────────────────
+// Operation Items
 
 model OperationItem {
   id          String    @id @default(uuid())
@@ -156,7 +153,7 @@ model OperationItem {
   @@map("operation_items")
 }
 
-// ─── 9. Stock Move History ───────────────────────────────
+// Stock Move History (immutable ledger)
 
 model StockMoveHistory {
   id             String     @id @default(uuid())

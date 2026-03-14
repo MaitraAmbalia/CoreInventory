@@ -66,7 +66,7 @@ export default function NewAdjustmentPage() {
     }
 
     try {
-      // Find scrap location
+
       const locRes = await fetch("/api/locations");
       const locData = await locRes.json();
       const scrapLoc = (locData.locations || []).find(
@@ -79,7 +79,7 @@ export default function NewAdjustmentPage() {
         return;
       }
 
-      // Create an adjustment operation
+
       const res = await fetch("/api/operations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -114,7 +114,7 @@ export default function NewAdjustmentPage() {
 
   return (
     <div className="animate-fade-in" style={{ maxWidth: 560 }}>
-      {/* Header */}
+      {}
       <div style={{ marginBottom: 24 }}>
         <Link
           href="/adjustments"

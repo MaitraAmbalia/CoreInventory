@@ -29,7 +29,7 @@ export default function AdjustmentsPage() {
 
   return (
     <div className="animate-fade-in">
-      {/* Header */}
+      {}
       <div
         style={{
           display: "flex",
@@ -70,7 +70,7 @@ export default function AdjustmentsPage() {
         </Link>
       </div>
 
-      {/* Table */}
+      {}
       <div className="glass-card" style={{ overflow: "hidden" }}>
         {loading ? (
           <div className="empty-state">

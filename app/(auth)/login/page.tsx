@@ -43,7 +43,7 @@ export default function LoginPage() {
   return (
     <div className="auth-container">
       <div className="auth-card animate-fade-in">
-        {/* Logo */}
+        {}
         <div style={{ textAlign: "center", marginBottom: 32 }}>
           <div
             style={{
@@ -75,7 +75,7 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Error */}
+        {}
         {error && (
           <div
             style={{
@@ -92,7 +92,7 @@ export default function LoginPage() {
           </div>
         )}
 
-        {/* Form */}
+        {}
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: 18 }}>
             <label className="form-label">Email</label>
@@ -183,7 +183,7 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* Footer */}
+        {}
         <div
           style={{
             textAlign: "center",

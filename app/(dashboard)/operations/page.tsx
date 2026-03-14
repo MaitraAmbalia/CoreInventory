@@ -62,7 +62,7 @@ export default function OperationsPage() {
 
   return (
     <div className="animate-fade-in">
-      {/* Header */}
+      {}
       <div
         style={{
           display: "flex",
@@ -103,7 +103,7 @@ export default function OperationsPage() {
         </Link>
       </div>
 
-      {/* Filters */}
+      {}
       <div
         className="glass-card"
         style={{
@@ -161,7 +161,7 @@ export default function OperationsPage() {
         </div>
       </div>
 
-      {/* Table */}
+      {}
       <div className="glass-card" style={{ overflow: "hidden" }}>
         {loading ? (
           <div className="empty-state">

@@ -38,7 +38,7 @@ export async function GET() {
       }),
     ]);
 
-    // Count distinct products that are low on stock
+
     const seenProductIds = new Set<string>();
     let lowStockItems = 0;
     for (const sl of lowStockLevels) {

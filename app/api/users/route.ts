@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { requireManager } from "@/lib/auth";
 
-// GET /api/users - List all users (Manager only)
 export async function GET(request: NextRequest) {
   try {
     const manager = await requireManager();

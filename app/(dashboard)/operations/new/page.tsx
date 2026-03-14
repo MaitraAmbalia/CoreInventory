@@ -54,7 +54,7 @@ export default function NewOperationPage() {
         }))
       );
 
-      // Auto-set locations based on type
+
       const locs = locData.locations || [];
       const inputLoc = locs.find((l: Location) => l.short_code === "WH/INPUT");
       const outputLoc = locs.find((l: Location) => l.short_code === "WH/OUTPUT");
@@ -67,7 +67,7 @@ export default function NewOperationPage() {
     });
   }, []);
 
-  // Auto-set locations when type changes
+
   useEffect(() => {
     const inputLoc = locations.find((l) => l.short_code === "WH/INPUT");
     const outputLoc = locations.find((l) => l.short_code === "WH/OUTPUT");
@@ -149,7 +149,7 @@ export default function NewOperationPage() {
 
   return (
     <div className="animate-fade-in" style={{ maxWidth: 720 }}>
-      {/* Header */}
+      {}
       <div style={{ marginBottom: 24 }}>
         <Link
           href="/operations"
@@ -194,7 +194,7 @@ export default function NewOperationPage() {
       )}
 
       <form onSubmit={handleSubmit}>
-        {/* Operation Info */}
+        {}
         <div className="glass-card" style={{ padding: 24, marginBottom: 16 }}>
           <h3
             style={{
@@ -293,7 +293,7 @@ export default function NewOperationPage() {
           </div>
         </div>
 
-        {/* Line Items */}
+        {}
         <div className="glass-card" style={{ padding: 24, marginBottom: 16 }}>
           <div
             style={{
@@ -399,7 +399,7 @@ export default function NewOperationPage() {
           ))}
         </div>
 
-        {/* Actions */}
+        {}
         <div
           style={{
             display: "flex",

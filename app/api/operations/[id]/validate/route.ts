@@ -25,14 +25,14 @@ export async function POST(
       return NextResponse.json({ error: "Cannot validate an operation with no items" }, { status: 400 });
     }
 
-    // Use Parameters to extract the correct interactive transaction client type
+
     type TxClient = Parameters<Parameters<typeof prisma.$transaction>[0]>[0];
     await prisma.$transaction(async (tx: TxClient) => {
       for (const item of operation.items) {
         const qty = Number(item.doneQty) > 0 ? Number(item.doneQty) : Number(item.demandQty);
         if (qty <= 0) continue;
 
-        // ─── Decrease stock at source location ───
+
         if (operation.srcLocationId) {
           const existingSrc = await tx.stockLevel.findFirst({
             where: { productId: item.productId, locationId: operation.srcLocationId },
@@ -48,7 +48,7 @@ export async function POST(
           }
         }
 
-        // ─── Increase stock at dest location ───
+
         if (operation.destLocationId) {
           const existingDest = await tx.stockLevel.findFirst({
             where: { productId: item.productId, locationId: operation.destLocationId },
@@ -73,7 +73,7 @@ export async function POST(
           }
         }
 
-        // ─── Create immutable move history record ───
+
         await tx.stockMoveHistory.create({
           data: {
             productId: item.productId,
@@ -84,7 +84,7 @@ export async function POST(
           },
         });
 
-        // ─── Mark item done ───
+
         if (Number(item.doneQty) === 0) {
           await tx.operationItem.update({
             where: { id: item.id },
@@ -93,7 +93,7 @@ export async function POST(
         }
       }
 
-      // ─── Mark operation Done ───
+
       await tx.operation.update({
         where: { id },
         data: { status: "Done" },

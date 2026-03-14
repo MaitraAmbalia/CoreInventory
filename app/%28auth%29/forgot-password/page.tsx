@@ -91,7 +91,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-950 p-4 sm:p-8 relative overflow-hidden">
-      {/* Background Orbs */}
+      {}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-600/20 blur-[120px]" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-violet-600/20 blur-[120px]" />
 
@@ -121,7 +121,7 @@ export default function ForgotPasswordPage() {
           </div>
         )}
 
-        {/* Step 1: Email */}
+        {}
         {step === "email" && (
           <form className="space-y-6 animate-in slide-in-from-right-4 fade-in" onSubmit={handleSendOtp}>
             <div className="space-y-2">
@@ -149,7 +149,7 @@ export default function ForgotPasswordPage() {
           </form>
         )}
 
-        {/* Step 2: OTP */}
+        {}
         {step === "otp" && (
           <form className="space-y-6 animate-in slide-in-from-right-4 fade-in" onSubmit={handleVerifyOtp}>
             <div className="space-y-2">
@@ -181,7 +181,7 @@ export default function ForgotPasswordPage() {
           </form>
         )}
 
-        {/* Step 3: New Password */}
+        {}
         {step === "reset" && (
           <form className="space-y-6 animate-in slide-in-from-right-4 fade-in" onSubmit={handleResetPassword}>
             <div className="space-y-2">
@@ -210,7 +210,7 @@ export default function ForgotPasswordPage() {
           </form>
         )}
 
-        {/* Step 4: Success */}
+        {}
         {step === "success" && (
           <div className="space-y-6 animate-in zoom-in-95 fade-in duration-500 flex flex-col items-center py-6">
             <div className="h-20 w-20 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 mb-2">
