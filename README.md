@@ -1,6 +1,3 @@
-<p align="center">
-  <img src="https://img.shields.io/badge/CoreInvent-Liquid_Glass-A855F7?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0yMSA2LjVsLTMtMS43NS0xMCAxMEwzIDguNWwtMyAxLjc1TDggMjBsMTMtMTMuNXoiLz48L3N2Zz4=" alt="CoreInvent" />
-</p>
 
 <h1 align="center">
   📦 CoreInvent
