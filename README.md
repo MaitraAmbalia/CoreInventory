@@ -1,5 +1,4 @@
 <h1 align="center">
-  📦 CoreInvent
   🌿 CoreInventory
 </h1>
 
@@ -8,16 +7,6 @@
   <em>Engineered for speed, precision, and visual excellence</em>
 </p>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Next.js-16.1.6-black?style=flat-square&logo=next.js" />
-  <img src="https://img.shields.io/badge/React-19.2.3-61DAFB?style=flat-square&logo=react" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss" />
-  <img src="https://img.shields.io/badge/Prisma-7.5.0-2D3748?style=flat-square&logo=prisma" />
-  <img src="https://img.shields.io/badge/PostgreSQL-Neon-4169E1?style=flat-square&logo=postgresql" />
-  <img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript" />
-  <strong>A centralized, rule-based inventory lifecycle management system</strong><br/>
-  <em>Built with the premium Verdant Glass design language</em>
-</p>
 
 ---
 
