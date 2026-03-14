@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import {
   Package,
   AlertTriangle,
@@ -185,7 +186,17 @@ export default function DashboardPage() {
         }}
       >
         {/* Receipts Overview */}
-        <div className="glass-card" style={{ padding: 24 }}>
+        <Link
+          href="/receipts"
+          className="glass-card"
+          style={{
+            padding: 24,
+            display: "block",
+            color: "inherit",
+            textDecoration: "none",
+            cursor: "pointer",
+          }}
+        >
           <div
             style={{
               display: "flex",
@@ -274,7 +285,7 @@ export default function DashboardPage() {
               </p>
             </div>
           </div>
-        </div>
+        </Link>
 
         {/* Deliveries Overview */}
         <div className="glass-card" style={{ padding: 24 }}>
@@ -397,7 +408,13 @@ export default function DashboardPage() {
               <tbody>
                 {data.recentOperations.map((op) => (
                   <tr key={op.id}>
-                    <td style={{ fontWeight: 600, fontFamily: "var(--font-mono)", fontSize: 13 }}>
+                    <td
+                      style={{
+                        fontWeight: 600,
+                        fontFamily: "var(--font-mono)",
+                        fontSize: 13,
+                      }}
+                    >
                       {op.ref_no}
                     </td>
                     <td>
@@ -409,7 +426,9 @@ export default function DashboardPage() {
                       {op.contact || "—"}
                     </td>
                     <td>
-                      <span className={`status-badge ${getStatusColor(op.status)}`}>
+                      <span
+                        className={`status-badge ${getStatusColor(op.status)}`}
+                      >
                         {op.status}
                       </span>
                     </td>

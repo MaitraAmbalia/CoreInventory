@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -15,6 +15,7 @@ import {
   Hash,
 } from "lucide-react";
 import { formatDateTime, getStatusColor, getTypeColor } from "@/lib/utils";
+import jsPDF from "jspdf";
 
 interface OperationDetail {
   id: string;
@@ -43,6 +44,7 @@ export default function OperationDetailPage() {
   const params = useParams();
   const router = useRouter();
   const id = params.id as string;
+  const printRef = useRef<HTMLDivElement>(null);
 
   const [operation, setOperation] = useState<OperationDetail | null>(null);
   const [items, setItems] = useState<OperationItem[]>([]);
@@ -63,7 +65,11 @@ export default function OperationDetailPage() {
   }, [id]);
 
   const handleValidate = async () => {
-    if (!confirm("Validate this operation? Stock will be updated and this cannot be undone."))
+    if (
+      !confirm(
+        "Validate this operation? Stock will be updated and this cannot be undone.",
+      )
+    )
       return;
 
     setValidating(true);
@@ -88,8 +94,46 @@ export default function OperationDetailPage() {
     }
   };
 
-  const handlePrint = () => {
-    window.print();
+  const handlePrint = async () => {
+    if (!printRef.current) return;
+
+    // Temporarily set a white background and proper sizing for the canvas shot
+    const originalBackground = printRef.current.style.background;
+    const originalBorder = printRef.current.style.border;
+    printRef.current.style.background = "white";
+    printRef.current.style.color = "black";
+    printRef.current.style.border = "none";
+
+    try {
+      const canvas = await html2canvas(printRef.current, {
+        useCORS: true,
+        background: "#ffffff",
+      });
+
+      const imgData = canvas.toDataURL("image/png");
+
+      // Calculate A4 dimensions
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+      });
+
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(imgData, "PNG", 0, 10, pdfWidth, pdfHeight);
+      pdf.save(`Receipt-${operation?.ref_no || "Doc"}.pdf`);
+    } catch (e) {
+      console.error("Print generation failed", e);
+    } finally {
+      // Revert styles safely
+      if (printRef.current) {
+        printRef.current.style.background = originalBackground;
+        printRef.current.style.color = "";
+        printRef.current.style.border = originalBorder;
+      }
+    }
   };
 
   if (loading) {
@@ -155,9 +199,7 @@ export default function OperationDetailPage() {
               >
                 {operation.ref_no}
               </h1>
-              <span
-                className={`status-badge ${getTypeColor(operation.type)}`}
-              >
+              <span className={`status-badge ${getTypeColor(operation.type)}`}>
                 {operation.type}
               </span>
               <span
@@ -246,11 +288,7 @@ export default function OperationDetailPage() {
             color: "#8b5cf6",
           },
         ].map((card) => (
-          <div
-            key={card.label}
-            className="glass-card"
-            style={{ padding: 16 }}
-          >
+          <div key={card.label} className="glass-card" style={{ padding: 16 }}>
             <div
               style={{
                 display: "flex",
@@ -318,8 +356,7 @@ export default function OperationDetailPage() {
                     style={{
                       fontWeight: 600,
                       color:
-                        parseFloat(item.done_qty) >=
-                        parseFloat(item.demand_qty)
+                        parseFloat(item.done_qty) >= parseFloat(item.demand_qty)
                           ? "var(--success)"
                           : "var(--text-primary)",
                     }}
