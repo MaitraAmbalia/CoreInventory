@@ -9,15 +9,6 @@
   <em>Built with the premium Verdant Glass design language</em>
 </p>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js" />
-  <img src="https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss" />
-  <img src="https://img.shields.io/badge/Prisma-7-2D3748?style=flat-square&logo=prisma" />
-  <img src="https://img.shields.io/badge/PostgreSQL-Neon-00E5FF?style=flat-square&logo=postgresql" />
-  <img src="https://img.shields.io/badge/Lucide_Icons-latest-orange?style=flat-square&logo=lucide" />
-</p>
-
 ---
 
 ## 🌟 Overview
