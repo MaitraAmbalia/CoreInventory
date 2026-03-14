@@ -15,7 +15,6 @@ import {
   Hash,
 } from "lucide-react";
 import { formatDateTime, getStatusColor, getTypeColor } from "@/lib/utils";
-import jsPDF from "jspdf";
 
 interface OperationDetail {
   id: string;
@@ -94,46 +93,8 @@ export default function OperationDetailPage() {
     }
   };
 
-  const handlePrint = async () => {
-    if (!printRef.current) return;
-
-    // Temporarily set a white background and proper sizing for the canvas shot
-    const originalBackground = printRef.current.style.background;
-    const originalBorder = printRef.current.style.border;
-    printRef.current.style.background = "white";
-    printRef.current.style.color = "black";
-    printRef.current.style.border = "none";
-
-    try {
-      const canvas = await html2canvas(printRef.current, {
-        useCORS: true,
-        background: "#ffffff",
-      });
-
-      const imgData = canvas.toDataURL("image/png");
-
-      // Calculate A4 dimensions
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
-      });
-
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-      pdf.addImage(imgData, "PNG", 0, 10, pdfWidth, pdfHeight);
-      pdf.save(`Receipt-${operation?.ref_no || "Doc"}.pdf`);
-    } catch (e) {
-      console.error("Print generation failed", e);
-    } finally {
-      // Revert styles safely
-      if (printRef.current) {
-        printRef.current.style.background = originalBackground;
-        printRef.current.style.color = "";
-        printRef.current.style.border = originalBorder;
-      }
-    }
+  const handlePrint = () => {
+    window.print();
   };
 
   if (loading) {
@@ -153,7 +114,7 @@ export default function OperationDetailPage() {
   }
 
   return (
-    <div className="animate-fade-in" style={{ maxWidth: 800 }}>
+    <div ref={printRef} className="animate-fade-in" style={{ maxWidth: 800 }}>
       {/* Header */}
       <div style={{ marginBottom: 24 }}>
         <Link
@@ -361,15 +322,16 @@ export default function OperationDetailPage() {
                           : "var(--text-primary)",
                     }}
                   >
-                    {parseFloat(item.done_qty).toFixed(0)}
-                    {parseFloat(item.done_qty) >=
-                      parseFloat(item.demand_qty) && (
-                      <CheckCircle
-                        size={14}
-                        style={{ marginLeft: 6, verticalAlign: "middle" }}
-                        color="var(--success)"
-                      />
-                    )}
+                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                      <span>{parseFloat(item.done_qty).toFixed(0)}</span>
+                      {parseFloat(item.done_qty) >=
+                        parseFloat(item.demand_qty) && (
+                        <CheckCircle
+                          size={14}
+                          color="var(--success)"
+                        />
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
