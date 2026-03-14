@@ -30,22 +30,7 @@ The interface adheres to the **Liquid Glass** design language: high-saturation p
 
 ---
 
-## 🎨 Design Language — Liquid Glass
 
-| Token | Value | Usage |
-|---|---|---|
-| `--purple-accent` | `#A855F7` | Primary brand color, CTA buttons |
-| `--navy-deep` | `#060F18` | Base environment & background |
-| `--glass-panel` | `rgba(255,255,255,0.03)` | Card and panel backgrounds |
-| `--glass-border` | `rgba(255,255,255,0.08)` | Structural borders |
-| `--glass-blur` | `24px` | Frosted aesthetic baseline |
-
-**Key effects:**
-- 🪟 **Frosted Layers** — Multi-layered `backdrop-filter` for a premium physical feel.
-- 🌌 **Depth & Scale** — Interactive elements that respond with subtle scale and glow.
-- 🔮 **Vivid Accents** — Semantic color coding for inventory states (Receipt/Delivery/Adjustment).
-
----
 
 ## 🏗️ Architecture
 
