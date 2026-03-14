@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import ThemeToggle from "@/components/theme-toggle";
+import GlobalSearch from "@/components/global-search";
 import {
   LayoutDashboard,
   Package,
@@ -23,6 +24,8 @@ import {
   Settings,
   Building2,
   BarChart3,
+  FolderTree,
+  Upload,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -43,6 +46,16 @@ const baseNavItems = [
     label: "Products",
     href: "/products",
     icon: Package,
+  },
+  {
+    label: "Categories",
+    href: "/categories",
+    icon: FolderTree,
+  },
+  {
+    label: "Import Products",
+    href: "/import",
+    icon: Upload,
   },
   {
     label: "Operations",
@@ -200,6 +213,11 @@ export default function Sidebar({ user }: SidebarProps) {
             </Link>
             <ThemeToggle />
           </div>
+        </div>
+
+        {/* Global Search */}
+        <div style={{ padding: "8px 12px 4px" }}>
+          <GlobalSearch />
         </div>
 
         {}

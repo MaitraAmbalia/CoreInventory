@@ -93,51 +93,8 @@ export default function OperationDetailPage() {
     }
   };
 
-<<<<<<< HEAD
-  const handlePrint = async () => {
-    if (!printRef.current) return;
-
-
-    const originalBackground = printRef.current.style.background;
-    const originalBorder = printRef.current.style.border;
-    printRef.current.style.background = "white";
-    printRef.current.style.color = "black";
-    printRef.current.style.border = "none";
-
-    try {
-      const canvas = await html2canvas(printRef.current, {
-        useCORS: true,
-        background: "#ffffff",
-      });
-
-      const imgData = canvas.toDataURL("image/png");
-
-
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
-      });
-
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-      pdf.addImage(imgData, "PNG", 0, 10, pdfWidth, pdfHeight);
-      pdf.save(`Receipt-${operation?.ref_no || "Doc"}.pdf`);
-    } catch (e) {
-      console.error("Print generation failed", e);
-    } finally {
-
-      if (printRef.current) {
-        printRef.current.style.background = originalBackground;
-        printRef.current.style.color = "";
-        printRef.current.style.border = originalBorder;
-      }
-    }
-=======
   const handlePrint = () => {
     window.print();
->>>>>>> 5765da3734c736b8be1bfb0fa999a7ef531196ca
   };
 
   if (loading) {
@@ -157,13 +114,8 @@ export default function OperationDetailPage() {
   }
 
   return (
-<<<<<<< HEAD
-    <div className="animate-fade-in" style={{ maxWidth: 800 }}>
-      {}
-=======
     <div ref={printRef} className="animate-fade-in" style={{ maxWidth: 800 }}>
-      {/* Header */}
->>>>>>> 5765da3734c736b8be1bfb0fa999a7ef531196ca
+      {}
       <div style={{ marginBottom: 24 }}>
         <Link
           href="/operations"
