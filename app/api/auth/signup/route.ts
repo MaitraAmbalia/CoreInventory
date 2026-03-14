@@ -33,13 +33,17 @@ export async function POST(request: NextRequest) {
     }
 
     const passwordHash = await hashPassword(password);
+    const normalizedEmail = email.toLowerCase().trim();
+
+    // Hardcode only one admin per user request
+    const role = normalizedEmail === "24bce037@nirmauni.ac.in" ? "Manager" : "Staff";
 
     const newUser = await prisma.user.create({
       data: {
         name: name.trim(),
-        email: email.toLowerCase().trim(),
+        email: normalizedEmail,
         passwordHash,
-        role: "Staff",
+        role,
       },
       select: { id: true, name: true, email: true, role: true },
     });

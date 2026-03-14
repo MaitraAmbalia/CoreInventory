@@ -18,6 +18,9 @@ import {
   Package2,
   Menu,
   X,
+  Users,
+  Settings,
+  Building2,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -28,7 +31,7 @@ interface SidebarProps {
   } | null;
 }
 
-const navItems = [
+const baseNavItems = [
   {
     label: "Dashboard",
     href: "/",
@@ -49,14 +52,14 @@ const navItems = [
     ],
   },
   {
+    label: "Inventory Adjustment",
+    href: "/adjustments",
+    icon: SlidersHorizontal,
+  },
+  {
     label: "Move History",
     href: "/move-history",
     icon: History,
-  },
-  {
-    label: "Adjustments",
-    href: "/adjustments",
-    icon: SlidersHorizontal,
   },
 ];
 
@@ -66,8 +69,28 @@ export default function Sidebar({ user }: SidebarProps) {
   const [operationsOpen, setOperationsOpen] = useState(
     pathname.startsWith("/operations")
   );
+  const [settingsOpen, setSettingsOpen] = useState(
+    pathname.includes("/settings") || pathname === "/users"
+  );
   const [profileOpen, setProfileOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Dynamic nav items based on user role
+  const navItems = [...baseNavItems];
+  if (user) {
+    const settingsChildren = [
+      { label: "Warehouse", href: "/settings/warehouses", icon: Building2 },
+    ];
+    if (user.role === "Manager") {
+      settingsChildren.push({ label: "Users", href: "/users", icon: Users });
+    }
+    navItems.push({
+      label: "Settings",
+      icon: Settings,
+      // @ts-ignore
+      children: settingsChildren,
+    });
+  }
 
   const handleLogout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
@@ -185,10 +208,12 @@ export default function Sidebar({ user }: SidebarProps) {
           </div>
           {navItems.map((item) => {
             if (item.children) {
+              const isOpen = item.label === "Operations" ? operationsOpen : settingsOpen;
+              const setOpen = item.label === "Operations" ? setOperationsOpen : setSettingsOpen;
               return (
                 <div key={item.label}>
                   <button
-                    onClick={() => setOperationsOpen(!operationsOpen)}
+                    onClick={() => setOpen(!isOpen)}
                     className="sidebar-link"
                     style={{
                       width: "calc(100% - 24px)",
@@ -208,7 +233,7 @@ export default function Sidebar({ user }: SidebarProps) {
                       size={14}
                       style={{
                         transition: "transform 0.2s ease",
-                        transform: operationsOpen
+                        transform: isOpen
                           ? "rotate(180deg)"
                           : "rotate(0deg)",
                       }}
@@ -216,7 +241,7 @@ export default function Sidebar({ user }: SidebarProps) {
                   </button>
                   <div
                     style={{
-                      maxHeight: operationsOpen ? 200 : 0,
+                      maxHeight: isOpen ? 200 : 0,
                       overflow: "hidden",
                       transition: "max-height 0.3s ease",
                     }}

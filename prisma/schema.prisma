@@ -37,8 +37,10 @@ model User {
   name         String
   email        String      @unique
   passwordHash String      @map("password_hash")
-  role         UserRole    @default(Staff)
-  createdAt    DateTime    @default(now()) @map("created_at")
+  role           UserRole    @default(Staff)
+  resetOtp       String?     @map("reset_otp")
+  resetOtpExpiry DateTime?   @map("reset_otp_expiry")
+  createdAt      DateTime    @default(now()) @map("created_at")
   operations   Operation[]
 
   @@map("users")
