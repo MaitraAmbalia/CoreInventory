@@ -38,6 +38,7 @@ export default function ProductDetailPage() {
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState("");
+  const [userRole, setUserRole] = useState<string>("Staff");
   const [activeTab, setActiveTab] = useState<"details" | "stock">("details");
   const [form, setForm] = useState({
     name: "",
@@ -49,6 +50,13 @@ export default function ProductDetailPage() {
   });
 
   useEffect(() => {
+    fetch("/api/auth/me")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.user) setUserRole(d.user.role);
+      })
+      .catch(console.error);
+
     Promise.all([
       fetch(`/api/products/${id}`).then((r) => r.json()),
       fetch("/api/categories").then((r) => r.json()),
@@ -149,15 +157,17 @@ export default function ProductDetailPage() {
           >
             {form.name || "Product Detail"}
           </h1>
-          <button
-            onClick={handleDelete}
-            className="btn-danger"
-            disabled={deleting}
-            style={{ display: "flex", alignItems: "center", gap: 6 }}
-          >
-            <Trash2 size={14} />
-            {deleting ? "Deleting..." : "Delete"}
-          </button>
+          {userRole === "Manager" && (
+            <button
+              onClick={handleDelete}
+              className="btn-danger"
+              disabled={deleting}
+              style={{ display: "flex", alignItems: "center", gap: 6 }}
+            >
+              <Trash2 size={14} />
+              {deleting ? "Deleting..." : "Delete"}
+            </button>
+          )}
         </div>
       </div>
 
@@ -317,39 +327,42 @@ export default function ProductDetailPage() {
                   }
                   rows={3}
                   style={{ resize: "vertical" }}
+                  disabled={userRole !== "Manager"}
                 />
               </div>
             </div>
           </div>
-          <div
-            style={{
-              display: "flex",
-              gap: 12,
-              marginTop: 20,
-              justifyContent: "flex-end",
-            }}
-          >
-            <Link
-              href="/products"
-              className="btn-secondary"
-              style={{ textDecoration: "none" }}
+          {userRole === "Manager" && (
+            <div
+              style={{
+                display: "flex",
+                gap: 12,
+                marginTop: 20,
+                justifyContent: "flex-end",
+              }}
             >
-              Cancel
-            </Link>
-            <button
-              type="submit"
-              className="btn-primary"
-              disabled={saving}
-              style={{ display: "flex", alignItems: "center", gap: 8 }}
-            >
-              {saving ? (
-                <Loader2 size={16} className="animate-spin" />
-              ) : (
-                <Save size={16} />
-              )}
-              {saving ? "Saving..." : "Save Changes"}
-            </button>
-          </div>
+              <Link
+                href="/products"
+                className="btn-secondary"
+                style={{ textDecoration: "none" }}
+              >
+                Cancel
+              </Link>
+              <button
+                type="submit"
+                className="btn-primary"
+                disabled={saving}
+                style={{ display: "flex", alignItems: "center", gap: 8 }}
+              >
+                {saving ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : (
+                  <Save size={16} />
+                )}
+                {saving ? "Saving..." : "Save Changes"}
+              </button>
+            </div>
+          )}
         </form>
       )}
 

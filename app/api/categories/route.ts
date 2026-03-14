@@ -1,5 +1,6 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import prisma from "@/lib/db";
+import { requireManager } from "@/lib/auth";
 
 export async function GET() {
   try {
@@ -13,8 +14,9 @@ export async function GET() {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
+    await requireManager();
     const { name, description } = await request.json();
     if (!name) {
       return NextResponse.json({ error: "Name is required" }, { status: 400 });

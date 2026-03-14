@@ -1,14 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
-import { hashPassword } from "@/lib/auth";
+import { getCurrentUser, hashPassword } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, otp, newPassword } = await request.json();
+    const sessionUrl = await getCurrentUser();
+    if (!sessionUrl) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-    if (!email || !otp || !newPassword) {
+    const { otp, newPassword } = await request.json();
+
+    if (!otp || !newPassword) {
       return NextResponse.json(
-        { error: "Email, OTP, and new password are required" },
+        { error: "OTP and new password are required" },
         { status: 400 }
       );
     }
@@ -22,13 +27,13 @@ export async function POST(request: NextRequest) {
 
     // Verify OTP
     const user = await prisma.user.findUnique({
-      where: { email: email.toLowerCase().trim() },
+      where: { id: sessionUrl.id },
     });
 
     if (!user) {
       return NextResponse.json(
-        { error: "Invalid OTP or email." },
-        { status: 400 }
+        { error: "User not found." },
+        { status: 404 }
       );
     }
 
@@ -60,10 +65,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: "Password reset successfully. You can now log in.",
+      message: "Password changed successfully. Please log in with your new password on next session.",
     });
   } catch (error) {
-    console.error("Reset password error:", error);
+    console.error("Profile change password error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

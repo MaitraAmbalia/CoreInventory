@@ -1,24 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { getCurrentUser } from "@/lib/auth";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: NextRequest) {
   try {
-    const { email } = await request.json();
-
-    if (!email) {
-      return NextResponse.json({ error: "Email is required" }, { status: 400 });
+    const sessionUrl = await getCurrentUser();
+    if (!sessionUrl) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await prisma.user.findUnique({
-      where: { email: email.toLowerCase().trim() },
+      where: { id: sessionUrl.id },
     });
 
     if (!user) {
-      // Don't reveal if user exists for security
-      return NextResponse.json({ success: true, message: "If an account with that email exists, an OTP has been sent." });
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     // Generate 6 digit OTP
@@ -36,24 +35,24 @@ export async function POST(request: NextRequest) {
     await resend.emails.send({
       from: "CoreInvent <onboarding@resend.dev>",
       to: user.email,
-      subject: "Password Reset Request",
+      subject: "Profile Password Change Request",
       html: `
         <div style="font-family: sans-serif; padding: 20px;">
-          <h2>Reset Your Password</h2>
+          <h2>Change Your Password</h2>
           <p>Hello ${user.name},</p>
-          <p>You have requested to reset your password. Here is your One-Time Password (OTP):</p>
+          <p>You have requested to change your password from your profile. Here is your One-Time Password (OTP):</p>
           <h1 style="letter-spacing: 4px; background: #f4f4f5; padding: 12px; display: inline-block; border-radius: 8px;">
             ${otp}
           </h1>
           <p>This code will expire in 15 minutes.</p>
-          <p>If you did not request this, you can safely ignore this email.</p>
+          <p>If you did not request this, please secure your account immediately or ignore this message.</p>
         </div>
       `,
     });
 
-    return NextResponse.json({ success: true, message: "OTP sent successfully" });
+    return NextResponse.json({ success: true, message: "OTP sent successfully to your registered email" });
   } catch (error) {
-    console.error("Forgot password error:", error);
+    console.error("Profile change password OTP error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

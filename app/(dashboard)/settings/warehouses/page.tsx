@@ -26,6 +26,7 @@ export default function WarehouseSettingsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
+  const [userRole, setUserRole] = useState<string>("Staff");
 
   // Modal State
   const [showModal, setShowModal] = useState(false);
@@ -47,6 +48,12 @@ export default function WarehouseSettingsPage() {
   };
 
   useEffect(() => {
+    fetch("/api/auth/me")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.user) setUserRole(d.user.role);
+      })
+      .catch(console.error);
     fetchWarehouses();
   }, []);
 
@@ -128,13 +135,15 @@ export default function WarehouseSettingsPage() {
           </h1>
           <p className="text-slate-400 mt-1">Manage physical storage locations and facilities.</p>
         </div>
-        <button
-          onClick={() => openModal("Create")}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl flex items-center gap-2 transition-colors font-medium shadow-lg shadow-indigo-600/20"
-        >
-          <Plus size={18} />
-          Add Warehouse
-        </button>
+        {userRole === "Manager" && (
+          <button
+            onClick={() => openModal("Create")}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl flex items-center gap-2 transition-colors font-medium shadow-lg shadow-indigo-600/20"
+          >
+            <Plus size={18} />
+            Add Warehouse
+          </button>
+        )}
       </div>
 
       {error && <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl">{error}</div>}
@@ -163,13 +172,15 @@ export default function WarehouseSettingsPage() {
                 <th className="p-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Short Code</th>
                 <th className="p-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Address</th>
                 <th className="p-4 text-xs font-semibold text-slate-400 uppercase tracking-wider text-right">Total Stock</th>
-                <th className="p-4 text-xs font-semibold text-slate-400 uppercase tracking-wider text-right">Actions</th>
+                {userRole === "Manager" && (
+                  <th className="p-4 text-xs font-semibold text-slate-400 uppercase tracking-wider text-right">Actions</th>
+                )}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/50">
               {filteredWarehouses.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="p-8 text-center text-slate-500">
+                  <td colSpan={userRole === "Manager" ? 5 : 4} className="p-8 text-center text-slate-500">
                     No warehouses found.
                   </td>
                 </tr>
@@ -204,22 +215,24 @@ export default function WarehouseSettingsPage() {
                         {parseFloat(wh.totalStock.toString()).toFixed(0)} <span className="text-xs font-normal text-slate-500">units</span>
                       </span>
                     </td>
-                    <td className="p-4 text-right">
-                      <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
-                          onClick={() => openModal("Edit", wh)}
-                          className="p-1.5 text-slate-400 hover:text-indigo-400 hover:bg-indigo-400/10 rounded-md transition-colors"
-                        >
-                          <Edit2 className="h-4 w-4" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(wh.id)}
-                          className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-md transition-colors"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </td>
+                    {userRole === "Manager" && (
+                      <td className="p-4 text-right">
+                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={() => openModal("Edit", wh)}
+                            className="p-1.5 text-slate-400 hover:text-indigo-400 hover:bg-indigo-400/10 rounded-md transition-colors"
+                          >
+                            <Edit2 className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(wh.id)}
+                            className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-md transition-colors"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 ))
               )}

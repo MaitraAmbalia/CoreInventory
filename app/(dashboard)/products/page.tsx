@@ -31,6 +31,7 @@ export default function ProductsPage() {
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [loading, setLoading] = useState(true);
+  const [userRole, setUserRole] = useState<string>("Staff");
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -44,6 +45,13 @@ export default function ProductsPage() {
   };
 
   useEffect(() => {
+    fetch("/api/auth/me")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.user) setUserRole(d.user.role);
+      })
+      .catch(console.error);
+
     fetch("/api/categories")
       .then((r) => r.json())
       .then((d) => setCategories(d.categories || []));
@@ -86,19 +94,21 @@ export default function ProductsPage() {
             Manage your product catalog
           </p>
         </div>
-        <Link
-          href="/products/new"
-          className="btn-primary"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 8,
-            textDecoration: "none",
-          }}
-        >
-          <Plus size={16} />
-          New Product
-        </Link>
+        {userRole === "Manager" && (
+          <Link
+            href="/products/new"
+            className="btn-primary"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              textDecoration: "none",
+            }}
+          >
+            <Plus size={16} />
+            New Product
+          </Link>
+        )}
       </div>
 
       {/* Filters */}
