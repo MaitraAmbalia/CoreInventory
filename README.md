@@ -1,9 +1,7 @@
-<p align="center">
-  <img src="https://img.shields.io/badge/CoreInvent-Verdant_Glass-4a8c3f?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0yMSAxNi41YzAgLjM4LS4yMS43MS0uNTMuODhsLTcgNGEuOTQuOTQgMCAwIDEtLjk0IDBsLTctNGEuOTkuOTkgMCAwIDEtLjUzLS44OHYtOWMuMDEtLjM4LjIyLS43Mi41NC0uODhsNy00Yy4yOS0uMTcuNjUtLjE3Ljk0IDBsNyA0Yy4zMi4xNi41My41LjU0Ljg4djlabS0xMC41LTkuNTF2LTQuNThMMiAxMXoiLz48L3N2Zz4=" alt="CoreInvent" />
-</p>
+
 
 <h1 align="center">
-  🌿 CoreInvent
+  🌿 CoreInventory
 </h1>
 
 <p align="center">
