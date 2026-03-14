@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import ThemeToggle from "@/components/theme-toggle";
 import {
   LayoutDashboard,
   Package,
@@ -34,7 +35,7 @@ interface SidebarProps {
 const baseNavItems = [
   {
     label: "Dashboard",
-    href: "/",
+    href: "/dashboard",
     icon: LayoutDashboard,
   },
   {
@@ -99,7 +100,7 @@ export default function Sidebar({ user }: SidebarProps) {
   };
 
   const isActive = (href: string) => {
-    if (href === "/") return pathname === "/";
+    if (href === "/dashboard") return pathname === "/dashboard";
     return pathname.startsWith(href.split("?")[0]);
   };
 
@@ -150,45 +151,48 @@ export default function Sidebar({ user }: SidebarProps) {
             borderBottom: "1px solid var(--border-primary)",
           }}
         >
-          <Link
-            href="/"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-              textDecoration: "none",
-            }}
-          >
-            <div
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <Link
+              href="/"
               style={{
-                width: 36,
-                height: 36,
-                borderRadius: "var(--radius-md)",
-                background: "var(--accent-gradient)",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
+                gap: 12,
+                textDecoration: "none",
               }}
             >
-              <Package2 size={20} color="white" />
-            </div>
-            <div>
               <div
                 style={{
-                  fontSize: 16,
-                  fontWeight: 700,
-                  color: "var(--text-primary)",
-                  letterSpacing: "-0.02em",
+                  width: 36,
+                  height: 36,
+                  borderRadius: "var(--radius-md)",
+                  background: "var(--accent-gradient)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
                 }}
               >
-                CoreInvent
+                <Package2 size={20} color="white" />
               </div>
-              <div style={{ fontSize: 11, color: "var(--text-muted)" }}>
-                Inventory System
+              <div>
+                <div
+                  style={{
+                    fontSize: 16,
+                    fontWeight: 700,
+                    color: "var(--text-primary)",
+                    letterSpacing: "-0.02em",
+                  }}
+                >
+                  CoreInvent
+                </div>
+                <div style={{ fontSize: 11, color: "var(--text-muted)" }}>
+                  Inventory System
+                </div>
               </div>
-            </div>
-          </Link>
+            </Link>
+            <ThemeToggle />
+          </div>
         </div>
 
         {/* Navigation */}
