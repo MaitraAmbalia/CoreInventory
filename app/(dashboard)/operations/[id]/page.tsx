@@ -15,7 +15,6 @@ import {
   Hash,
 } from "lucide-react";
 import { formatDateTime, getStatusColor, getTypeColor } from "@/lib/utils";
-import jsPDF from "jspdf";
 
 interface OperationDetail {
   id: string;
@@ -94,6 +93,7 @@ export default function OperationDetailPage() {
     }
   };
 
+<<<<<<< HEAD
   const handlePrint = async () => {
     if (!printRef.current) return;
 
@@ -134,6 +134,10 @@ export default function OperationDetailPage() {
         printRef.current.style.border = originalBorder;
       }
     }
+=======
+  const handlePrint = () => {
+    window.print();
+>>>>>>> 5765da3734c736b8be1bfb0fa999a7ef531196ca
   };
 
   if (loading) {
@@ -153,8 +157,13 @@ export default function OperationDetailPage() {
   }
 
   return (
+<<<<<<< HEAD
     <div className="animate-fade-in" style={{ maxWidth: 800 }}>
       {}
+=======
+    <div ref={printRef} className="animate-fade-in" style={{ maxWidth: 800 }}>
+      {/* Header */}
+>>>>>>> 5765da3734c736b8be1bfb0fa999a7ef531196ca
       <div style={{ marginBottom: 24 }}>
         <Link
           href="/operations"
@@ -361,15 +370,16 @@ export default function OperationDetailPage() {
                           : "var(--text-primary)",
                     }}
                   >
-                    {parseFloat(item.done_qty).toFixed(0)}
-                    {parseFloat(item.done_qty) >=
-                      parseFloat(item.demand_qty) && (
-                      <CheckCircle
-                        size={14}
-                        style={{ marginLeft: 6, verticalAlign: "middle" }}
-                        color="var(--success)"
-                      />
-                    )}
+                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                      <span>{parseFloat(item.done_qty).toFixed(0)}</span>
+                      {parseFloat(item.done_qty) >=
+                        parseFloat(item.demand_qty) && (
+                        <CheckCircle
+                          size={14}
+                          color="var(--success)"
+                        />
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
